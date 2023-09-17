@@ -1,0 +1,52 @@
+project_name: tf-import-gen
+
+before:
+  hooks:
+    - go mod download
+
+builds:
+  - main: ./cmd
+    binary: tf-import-gen
+    ldflags:
+      - -X main.Version={{.Version}}
+    goos:
+      - windows
+      - darwin
+      - linux
+    goarch:
+      - amd64
+      - arm64
+
+brews:
+  - tap:
+      owner: kishaningithub
+      name: homebrew-tap
+    folder: Formula
+    homepage: https://github.com/kishaningithub/tf-import-gen
+    description: Tool to generate terraform import statements to simplify state migrations from one terraform code base to another
+    license: MIT
+
+nfpms:
+  - id: tf-import-gen
+    package_name: tf-import-gen
+    homepage: https://github.com/kishaningithub/tf-import-gen
+    description: Tool to generate terraform import statements to simplify state migrations from one terraform code base to another
+    maintainer: Kishan B <kishancs46@gmail.com>
+    license: MIT
+    formats:
+      - apk
+      - deb
+      - rpm
+
+kos:
+  - main: ./cmd/
+    base_image: alpine
+    repository: ghcr.io/kishaningithub/tf-import-gen
+    platforms:
+      - linux/amd64
+      - linux/arm64
+    tags:
+      - '{{.Version}}'
+      - latest
+    bare: true
+    preserve_import_paths: false
