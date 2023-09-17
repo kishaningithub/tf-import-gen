@@ -5,7 +5,7 @@ before:
     - go mod download
 
 builds:
-  - main: ./cmd
+  - main: .
     binary: tf-import-gen
     ldflags:
       - -X main.Version={{.Version}}
