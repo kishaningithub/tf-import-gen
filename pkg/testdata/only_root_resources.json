@@ -1,0 +1,32 @@
+{
+  "format_version": "0.1",
+  "terraform_version": "0.12.31",
+  "values": {
+    "root_module": {
+      "resources": [
+        {
+          "address": "aws_glue_catalog_database.test_db",
+          "mode": "managed",
+          "type": "aws_glue_catalog_database",
+          "name": "test_db",
+          "provider_name": "aws",
+          "schema_version": 0,
+          "values": {
+            "id": "id_test_db"
+          }
+        },
+        {
+          "address": "aws_iam_instance_profile.test_instance_profile",
+          "mode": "managed",
+          "type": "aws_iam_instance_profile",
+          "name": "test_instance_profile",
+          "provider_name": "aws",
+          "schema_version": 0,
+          "values": {
+            "id": "id_test_instance_profile"
+          }
+        }
+      ]
+    }
+  }
+}
