@@ -1,0 +1,37 @@
+{
+  "format_version": "0.1",
+  "terraform_version": "0.12.31",
+  "values": {
+    "root_module": {
+      "child_modules": [
+        {
+          "resources": [
+            {
+              "address": "aws_iam_policy.test_mwaa_permissions",
+              "mode": "managed",
+              "type": "aws_iam_policy",
+              "name": "test_mwaa_permissions",
+              "provider_name": "aws",
+              "schema_version": 0,
+              "values": {
+                "id": "id_test_mwaa_permissions"
+              }
+            },
+            {
+              "address": "aws_mwaa_environment.test_airflow_env",
+              "mode": "managed",
+              "type": "aws_mwaa_environment",
+              "name": "test_airflow_env",
+              "provider_name": "aws",
+              "schema_version": 0,
+              "values": {
+                "id": "id_test_airflow_env"
+              }
+            }
+          ],
+          "address": "module.test_mwaa"
+        }
+      ]
+    }
+  }
+}
