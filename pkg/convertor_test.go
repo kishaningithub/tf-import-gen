@@ -33,12 +33,13 @@ func Test_ComputeTerraformImportForResource(t *testing.T) {
 				Address: "aws_lambda_permission.test",
 				Type:    "aws_lambda_permission",
 				AttributeValues: map[string]any{
-					"statement_id": "test_statement_id",
+					"statement_id":  "test-statement-id",
+					"function_name": "test-function-name",
 				},
 			},
 			expected: TerraformImport{
 				ResourceAddress: "aws_lambda_permission.test",
-				ResourceID:      "test_statement_id",
+				ResourceID:      "test-function-name/test-statement-id",
 			},
 		},
 		{

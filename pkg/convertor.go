@@ -20,7 +20,9 @@ func computeResourceID(resource parser.TerraformResource) string {
 		policyArn := fmt.Sprint(resource.AttributeValues["policy_arn"])
 		return fmt.Sprintf("%s/%s", role, policyArn)
 	case "aws_lambda_permission":
-		return fmt.Sprint(resource.AttributeValues["statement_id"])
+		functionName := fmt.Sprint(resource.AttributeValues["function_name"])
+		statementId := fmt.Sprint(resource.AttributeValues["statement_id"])
+		return fmt.Sprintf("%s/%s", functionName, statementId)
 	case "aws_security_group_rule":
 		return computeResourceIDForAWSSecurityGroupRole(resource)
 	default:
