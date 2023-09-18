@@ -9,7 +9,7 @@ Tool to generate terraform import statements to simplify state migrations from o
 <!-- TOC -->
 * [tf-import-gen (Terraform import generator)](#tf-import-gen-terraform-import-generator)
   * [Installation](#installation)
-    * [Using Homebrew](#using-homebrew)
+    * [Using Homebrew (Mac and linux)](#using-homebrew-mac-and-linux)
     * [Using docker](#using-docker)
     * [Others](#others)
   * [Examples](#examples)
