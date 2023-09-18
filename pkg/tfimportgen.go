@@ -1,12 +1,11 @@
 package tfimportgen
 
 import (
-	"github.com/kishaningithub/tf-import-gen/pkg/internal"
 	"github.com/kishaningithub/tf-import-gen/pkg/internal/parser"
 	"io"
 )
 
-func GenerateImports(stateJsonReader io.Reader, address string) (internal.TerraformImports, error) {
+func GenerateImports(stateJsonReader io.Reader, address string) (TerraformImports, error) {
 	resources, err := parser.NewTerraformStateJsonParser(stateJsonReader).Parse()
 	if err != nil {
 		return nil, err
@@ -14,9 +13,9 @@ func GenerateImports(stateJsonReader io.Reader, address string) (internal.Terraf
 
 	resources = resources.FilterByAddress(address)
 
-	var imports internal.TerraformImports
+	var imports TerraformImports
 	for _, resource := range resources {
-		terraformImport := internal.NewTerraformImport(resource)
+		terraformImport := computeTerraformImportForResource(resource)
 		imports = append(imports, terraformImport)
 	}
 

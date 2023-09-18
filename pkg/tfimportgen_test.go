@@ -2,7 +2,6 @@ package tfimportgen_test
 
 import (
 	tfimportgen "github.com/kishaningithub/tf-import-gen/pkg"
-	"github.com/kishaningithub/tf-import-gen/pkg/internal"
 	"github.com/stretchr/testify/require"
 	"os"
 	"path/filepath"
@@ -13,12 +12,12 @@ func Test_GenerateImports_ShouldGenerateImportsForAllResourcesWhenNoFiltersAreGi
 	tests := []struct {
 		name     string
 		filePath string
-		expected internal.TerraformImports
+		expected tfimportgen.TerraformImports
 	}{
 		{
 			name:     "only root resources",
 			filePath: "testdata/only_root_resources.json",
-			expected: internal.TerraformImports{
+			expected: tfimportgen.TerraformImports{
 				{
 					ResourceAddress: "aws_glue_catalog_database.test_db",
 					ResourceID:      "id_test_db",
@@ -32,7 +31,7 @@ func Test_GenerateImports_ShouldGenerateImportsForAllResourcesWhenNoFiltersAreGi
 		{
 			name:     "resources in child module",
 			filePath: "testdata/resources_in_child_module.json",
-			expected: internal.TerraformImports{
+			expected: tfimportgen.TerraformImports{
 				{
 					ResourceAddress: "module.test_mwaa.aws_iam_policy.test_mwaa_permissions",
 					ResourceID:      "id_test_mwaa_permissions",
@@ -46,7 +45,7 @@ func Test_GenerateImports_ShouldGenerateImportsForAllResourcesWhenNoFiltersAreGi
 		{
 			name:     "resources in deeply nested child module",
 			filePath: "testdata/resources_in_deeply_nested_child_module.json",
-			expected: internal.TerraformImports{
+			expected: tfimportgen.TerraformImports{
 				{
 					ResourceAddress: "module.test_mwaa.nested1.nested2.aws_iam_policy.test_mwaa_permissions",
 					ResourceID:      "id_test_mwaa_permissions",
@@ -79,12 +78,12 @@ func Test_GenerateImports_ShouldGenerateImportsForResourcesForGivenAddress(t *te
 	tests := []struct {
 		name     string
 		address  string
-		expected internal.TerraformImports
+		expected tfimportgen.TerraformImports
 	}{
 		{
 			name:    "filtering by module",
 			address: "module.test_mwaa",
-			expected: internal.TerraformImports{
+			expected: tfimportgen.TerraformImports{
 				{
 					ResourceAddress: "module.test_mwaa.aws_iam_policy.test_mwaa_permissions",
 					ResourceID:      "id_test_mwaa_permissions",
@@ -98,7 +97,7 @@ func Test_GenerateImports_ShouldGenerateImportsForResourcesForGivenAddress(t *te
 		{
 			name:    "filtering by resource",
 			address: "aws_glue_catalog_database.test_db",
-			expected: internal.TerraformImports{
+			expected: tfimportgen.TerraformImports{
 				{
 					ResourceAddress: "aws_glue_catalog_database.test_db",
 					ResourceID:      "id_test_db",

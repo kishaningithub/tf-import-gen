@@ -1,8 +1,8 @@
-package internal_test
+package tfimportgen_test
 
 import (
 	"fmt"
-	tfimportgen "github.com/kishaningithub/tf-import-gen/pkg/internal"
+	"github.com/kishaningithub/tf-import-gen/pkg"
 	"github.com/stretchr/testify/require"
 	"testing"
 )
@@ -53,5 +53,4 @@ import {
 	require.Equal(t, expectedResult, fmt.Sprint(imports))
 	require.Equal(t, expectedResult, fmt.Sprintf("%s", imports))
 	require.Equal(t, expectedResult, fmt.Sprintf("%v", imports))
-
 }
