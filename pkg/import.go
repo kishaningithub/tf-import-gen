@@ -31,11 +31,3 @@ func (terraformImports TerraformImports) String() string {
 	}
 	return terraformImportsStr.String()
 }
-
-func (terraformImport TerraformImport) ToImportBlock() string {
-	importTemplate := `import {
-  to = %s
-  id = "%s"
-}`
-	return fmt.Sprintf(importTemplate, terraformImport.ResourceAddress, terraformImport.ResourceID)
-}
