@@ -1,7 +1,7 @@
 test:
 	go test -race -v ./...
 
-build: download-deps tidy-deps fmt compile test
+build: download-deps tidy-deps compile test
 
 fmt:
 	gofmt -l -s -w .
