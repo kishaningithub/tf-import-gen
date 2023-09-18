@@ -22,7 +22,7 @@ Tool to generate terraform import statements to simplify state migrations from o
 
 ## Installation
 
-### Using Homebrew
+### Using Homebrew (Mac and linux)
 
 ```bash
 brew install kishaningithub/tap/tf-import-gen
@@ -30,14 +30,14 @@ brew install kishaningithub/tap/tf-import-gen
 
 ### Using docker
 
-pulling the image
+Pulling the image
 ```bash
 docker pull ghcr.io/kishaningithub/tf-import-gen:0.1.0
 ```
 
-running the image in interactive mode (volume mounted aws folder for config)
+Running the image in interactive mode
 ```bash
-docker run -it -v "${HOME}/.aws:/root/.aws" ghcr.io/kishaningithub/tf-import-gen:0.1.0
+docker run -it ghcr.io/kishaningithub/tf-import-gen:0.1.0
 ```
 
 ### Others
