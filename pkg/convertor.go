@@ -16,7 +16,9 @@ func computeTerraformImportForResource(resource parser.TerraformResource) Terraf
 func computeResourceID(resource parser.TerraformResource) string {
 	switch resource.Type {
 	case "aws_iam_role_policy_attachment":
-		return fmt.Sprint(resource.AttributeValues["policy_arn"])
+		role := fmt.Sprint(resource.AttributeValues["role"])
+		policyArn := fmt.Sprint(resource.AttributeValues["policy_arn"])
+		return fmt.Sprintf("%s/%s", role, policyArn)
 	case "aws_lambda_permission":
 		return fmt.Sprint(resource.AttributeValues["statement_id"])
 	case "aws_security_group_rule":

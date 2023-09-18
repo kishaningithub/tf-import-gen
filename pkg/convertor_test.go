@@ -18,12 +18,13 @@ func Test_ComputeTerraformImportForResource(t *testing.T) {
 				Address: "aws_iam_role_policy_attachment.test",
 				Type:    "aws_iam_role_policy_attachment",
 				AttributeValues: map[string]any{
-					"policy_arn": "test_policy_arn",
+					"role":       "test-role",
+					"policy_arn": "test-policy-arn",
 				},
 			},
 			expected: TerraformImport{
 				ResourceAddress: "aws_iam_role_policy_attachment.test",
-				ResourceID:      "test_policy_arn",
+				ResourceID:      "test-role/test-policy-arn",
 			},
 		},
 		{
