@@ -72,7 +72,7 @@ func Test_ComputeTerraformImportForResource(t *testing.T) {
 					"protocol":          "protocol",
 					"from_port":         1234,
 					"to_port":           5678,
-					"cidr_blocks":       []string{"cidr-block-1", "cidr-block-2"},
+					"cidr_blocks":       []any{"cidr-block-1", "cidr-block-2"},
 				},
 			},
 			expected: TerraformImport{
