@@ -26,7 +26,7 @@ func computeResourceID(resource parser.TerraformResource) string {
 		return computeResourceIDForAWSSecurityGroupRole(resource)
 	case "aws_api_gateway_resource":
 		return fmt.Sprintf("%s/%s", getValue("rest_api_id"), getValue("id"))
-	case "aws_api_gateway_method":
+	case "aws_api_gateway_method", "aws_api_gateway_integration":
 		return fmt.Sprintf("%s/%s/%s", getValue("rest_api_id"), getValue("resource_id"), getValue("http_method"))
 	default:
 		return getValue("id")

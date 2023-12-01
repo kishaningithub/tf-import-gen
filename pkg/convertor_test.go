@@ -112,6 +112,22 @@ func Test_ComputeTerraformImportForResource(t *testing.T) {
 			},
 		},
 		{
+			name: "For aws_api_gateway_integration",
+			terraformResource: parser.TerraformResource{
+				Address: "aws_api_gateway_integration.test",
+				Type:    "aws_api_gateway_integration",
+				AttributeValues: map[string]any{
+					"http_method": "http_method",
+					"resource_id": "resource_id",
+					"rest_api_id": "rest_api_id",
+				},
+			},
+			expected: TerraformImport{
+				ResourceAddress: "aws_api_gateway_integration.test",
+				ResourceID:      "rest_api_id/resource_id/http_method",
+			},
+		},
+		{
 			name: "For everything else",
 			terraformResource: parser.TerraformResource{
 				Address: "example.address",
