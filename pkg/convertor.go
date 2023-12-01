@@ -14,23 +14,22 @@ func computeTerraformImportForResource(resource parser.TerraformResource) Terraf
 }
 
 func computeResourceID(resource parser.TerraformResource) string {
+	getValue := func(name string) string {
+		return fmt.Sprint(resource.AttributeValues[name])
+	}
 	switch resource.Type {
 	case "aws_iam_role_policy_attachment":
-		role := fmt.Sprint(resource.AttributeValues["role"])
-		policyArn := fmt.Sprint(resource.AttributeValues["policy_arn"])
-		return fmt.Sprintf("%s/%s", role, policyArn)
+		return fmt.Sprintf("%s/%s", getValue("role"), getValue("policy_arn"))
 	case "aws_lambda_permission":
-		functionName := fmt.Sprint(resource.AttributeValues["function_name"])
-		statementId := fmt.Sprint(resource.AttributeValues["statement_id"])
-		return fmt.Sprintf("%s/%s", functionName, statementId)
+		return fmt.Sprintf("%s/%s", getValue("function_name"), getValue("statement_id"))
 	case "aws_security_group_rule":
 		return computeResourceIDForAWSSecurityGroupRole(resource)
 	case "aws_api_gateway_resource":
-		restApiId := fmt.Sprint(resource.AttributeValues["rest_api_id"])
-		resourceId := fmt.Sprint(resource.AttributeValues["id"])
-		return fmt.Sprintf("%s/%s", restApiId, resourceId)
+		return fmt.Sprintf("%s/%s", getValue("rest_api_id"), getValue("id"))
+	case "aws_api_gateway_method":
+		return fmt.Sprintf("%s/%s/%s", getValue("rest_api_id"), getValue("resource_id"), getValue("http_method"))
 	default:
-		return fmt.Sprint(resource.AttributeValues["id"])
+		return getValue("id")
 	}
 }
 
