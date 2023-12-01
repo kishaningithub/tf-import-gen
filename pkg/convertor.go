@@ -25,6 +25,10 @@ func computeResourceID(resource parser.TerraformResource) string {
 		return fmt.Sprintf("%s/%s", functionName, statementId)
 	case "aws_security_group_rule":
 		return computeResourceIDForAWSSecurityGroupRole(resource)
+	case "aws_api_gateway_resource":
+		restApiId := fmt.Sprint(resource.AttributeValues["rest_api_id"])
+		resourceId := fmt.Sprint(resource.AttributeValues["id"])
+		return fmt.Sprintf("%s/%s", restApiId, resourceId)
 	default:
 		return fmt.Sprint(resource.AttributeValues["id"])
 	}
