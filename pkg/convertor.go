@@ -28,6 +28,8 @@ func computeResourceID(resource parser.TerraformResource) string {
 		return fmt.Sprintf("%s/%s", getValue("rest_api_id"), getValue("id"))
 	case "aws_api_gateway_stage":
 		return fmt.Sprintf("%s/%s", getValue("rest_api_id"), getValue("stage_name"))
+	case "aws_api_gateway_method_settings":
+		return fmt.Sprintf("%s/%s/%s", getValue("rest_api_id"), getValue("stage_name"), getValue("method_path"))
 	case "aws_api_gateway_method", "aws_api_gateway_integration":
 		return fmt.Sprintf("%s/%s/%s", getValue("rest_api_id"), getValue("resource_id"), getValue("http_method"))
 	default:
