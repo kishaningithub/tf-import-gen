@@ -24,7 +24,7 @@ func computeResourceID(resource parser.TerraformResource) string {
 		return fmt.Sprintf("%s/%s", getValue("function_name"), getValue("statement_id"))
 	case "aws_security_group_rule":
 		return computeResourceIDForAWSSecurityGroupRole(resource)
-	case "aws_api_gateway_resource":
+	case "aws_api_gateway_resource", "aws_api_gateway_deployment":
 		return fmt.Sprintf("%s/%s", getValue("rest_api_id"), getValue("id"))
 	case "aws_api_gateway_method", "aws_api_gateway_integration":
 		return fmt.Sprintf("%s/%s/%s", getValue("rest_api_id"), getValue("resource_id"), getValue("http_method"))
