@@ -81,6 +81,99 @@ func Test_ComputeTerraformImportForResource(t *testing.T) {
 			},
 		},
 		{
+			name: "For aws_api_gateway_resource",
+			terraformResource: parser.TerraformResource{
+				Address: "aws_api_gateway_resource.test",
+				Type:    "aws_api_gateway_resource",
+				AttributeValues: map[string]any{
+					"id":          "id",
+					"rest_api_id": "rest_api_id",
+				},
+			},
+			expected: TerraformImport{
+				ResourceAddress: "aws_api_gateway_resource.test",
+				ResourceID:      "rest_api_id/id",
+			},
+		},
+		{
+			name: "For aws_api_gateway_deployment",
+			terraformResource: parser.TerraformResource{
+				Address: "aws_api_gateway_deployment.test",
+				Type:    "aws_api_gateway_deployment",
+				AttributeValues: map[string]any{
+					"id":          "id",
+					"rest_api_id": "rest_api_id",
+				},
+			},
+			expected: TerraformImport{
+				ResourceAddress: "aws_api_gateway_deployment.test",
+				ResourceID:      "rest_api_id/id",
+			},
+		},
+		{
+			name: "For aws_api_gateway_stage",
+			terraformResource: parser.TerraformResource{
+				Address: "aws_api_gateway_stage.test",
+				Type:    "aws_api_gateway_stage",
+				AttributeValues: map[string]any{
+					"rest_api_id": "rest_api_id",
+					"stage_name":  "stage_name",
+				},
+			},
+			expected: TerraformImport{
+				ResourceAddress: "aws_api_gateway_stage.test",
+				ResourceID:      "rest_api_id/stage_name",
+			},
+		},
+		{
+			name: "For aws_api_gateway_method_settings",
+			terraformResource: parser.TerraformResource{
+				Address: "aws_api_gateway_method_settings.test",
+				Type:    "aws_api_gateway_method_settings",
+				AttributeValues: map[string]any{
+					"rest_api_id": "rest_api_id",
+					"stage_name":  "stage_name",
+					"method_path": "method_path",
+				},
+			},
+			expected: TerraformImport{
+				ResourceAddress: "aws_api_gateway_method_settings.test",
+				ResourceID:      "rest_api_id/stage_name/method_path",
+			},
+		},
+		{
+			name: "For aws_api_gateway_method",
+			terraformResource: parser.TerraformResource{
+				Address: "aws_api_gateway_method.test",
+				Type:    "aws_api_gateway_method",
+				AttributeValues: map[string]any{
+					"http_method": "http_method",
+					"resource_id": "resource_id",
+					"rest_api_id": "rest_api_id",
+				},
+			},
+			expected: TerraformImport{
+				ResourceAddress: "aws_api_gateway_method.test",
+				ResourceID:      "rest_api_id/resource_id/http_method",
+			},
+		},
+		{
+			name: "For aws_api_gateway_integration",
+			terraformResource: parser.TerraformResource{
+				Address: "aws_api_gateway_integration.test",
+				Type:    "aws_api_gateway_integration",
+				AttributeValues: map[string]any{
+					"http_method": "http_method",
+					"resource_id": "resource_id",
+					"rest_api_id": "rest_api_id",
+				},
+			},
+			expected: TerraformImport{
+				ResourceAddress: "aws_api_gateway_integration.test",
+				ResourceID:      "rest_api_id/resource_id/http_method",
+			},
+		},
+		{
 			name: "For everything else",
 			terraformResource: parser.TerraformResource{
 				Address: "example.address",
