@@ -142,6 +142,21 @@ func Test_ComputeTerraformImportForResource(t *testing.T) {
 			},
 		},
 		{
+			name: "For aws_cloudwatch_event_target",
+			terraformResource: parser.TerraformResource{
+				Address: "aws_cloudwatch_event_target.test",
+				Type:    "aws_cloudwatch_event_target",
+				AttributeValues: map[string]any{
+					"rule":      "rule",
+					"target_id": "target_id",
+				},
+			},
+			expected: TerraformImport{
+				ResourceAddress: "aws_cloudwatch_event_target.test",
+				ResourceID:      "rule/target_id",
+			},
+		},
+		{
 			name: "For aws_api_gateway_method",
 			terraformResource: parser.TerraformResource{
 				Address: "aws_api_gateway_method.test",

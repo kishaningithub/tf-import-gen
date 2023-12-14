@@ -20,6 +20,8 @@ func computeResourceID(resource parser.TerraformResource) string {
 	switch resource.Type {
 	case "aws_iam_role_policy_attachment":
 		return fmt.Sprintf("%s/%s", getValue("role"), getValue("policy_arn"))
+	case "aws_cloudwatch_event_target":
+		return fmt.Sprintf("%s/%s", getValue("rule"), getValue("target_id"))
 	case "aws_lambda_permission":
 		return fmt.Sprintf("%s/%s", getValue("function_name"), getValue("statement_id"))
 	case "aws_security_group_rule":
