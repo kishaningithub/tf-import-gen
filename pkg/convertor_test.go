@@ -25,6 +25,7 @@ func Test_ComputeTerraformImportForResource(t *testing.T) {
 			expected: TerraformImport{
 				ResourceAddress: "aws_iam_role_policy_attachment.test",
 				ResourceID:      "test-role/test-policy-arn",
+				SupportsImport:  true,
 			},
 		},
 		{
@@ -40,6 +41,7 @@ func Test_ComputeTerraformImportForResource(t *testing.T) {
 			expected: TerraformImport{
 				ResourceAddress: "aws_lambda_permission.test",
 				ResourceID:      "test-function-name/test-statement-id",
+				SupportsImport:  true,
 			},
 		},
 		{
@@ -59,6 +61,7 @@ func Test_ComputeTerraformImportForResource(t *testing.T) {
 			expected: TerraformImport{
 				ResourceAddress: "aws_security_group_rule.test",
 				ResourceID:      "security-group-id_type_protocol_1234_5678_source-security-group-id",
+				SupportsImport:  true,
 			},
 		},
 		{
@@ -78,6 +81,7 @@ func Test_ComputeTerraformImportForResource(t *testing.T) {
 			expected: TerraformImport{
 				ResourceAddress: "aws_security_group_rule.test",
 				ResourceID:      "security-group-id_type_protocol_1234_5678_cidr-block-1_cidr-block-2",
+				SupportsImport:  true,
 			},
 		},
 		{
@@ -93,6 +97,7 @@ func Test_ComputeTerraformImportForResource(t *testing.T) {
 			expected: TerraformImport{
 				ResourceAddress: "aws_api_gateway_resource.test",
 				ResourceID:      "rest_api_id/id",
+				SupportsImport:  true,
 			},
 		},
 		{
@@ -108,6 +113,7 @@ func Test_ComputeTerraformImportForResource(t *testing.T) {
 			expected: TerraformImport{
 				ResourceAddress: "aws_api_gateway_deployment.test",
 				ResourceID:      "rest_api_id/id",
+				SupportsImport:  true,
 			},
 		},
 		{
@@ -123,6 +129,7 @@ func Test_ComputeTerraformImportForResource(t *testing.T) {
 			expected: TerraformImport{
 				ResourceAddress: "aws_api_gateway_stage.test",
 				ResourceID:      "rest_api_id/stage_name",
+				SupportsImport:  true,
 			},
 		},
 		{
@@ -139,6 +146,7 @@ func Test_ComputeTerraformImportForResource(t *testing.T) {
 			expected: TerraformImport{
 				ResourceAddress: "aws_api_gateway_method_settings.test",
 				ResourceID:      "rest_api_id/stage_name/method_path",
+				SupportsImport:  true,
 			},
 		},
 		{
@@ -154,6 +162,7 @@ func Test_ComputeTerraformImportForResource(t *testing.T) {
 			expected: TerraformImport{
 				ResourceAddress: "aws_cloudwatch_event_target.test",
 				ResourceID:      "rule/target_id",
+				SupportsImport:  true,
 			},
 		},
 		{
@@ -170,6 +179,7 @@ func Test_ComputeTerraformImportForResource(t *testing.T) {
 			expected: TerraformImport{
 				ResourceAddress: "aws_api_gateway_method.test",
 				ResourceID:      "rest_api_id/resource_id/http_method",
+				SupportsImport:  true,
 			},
 		},
 		{
@@ -186,6 +196,7 @@ func Test_ComputeTerraformImportForResource(t *testing.T) {
 			expected: TerraformImport{
 				ResourceAddress: "aws_api_gateway_integration.test",
 				ResourceID:      "rest_api_id/resource_id/http_method",
+				SupportsImport:  true,
 			},
 		},
 		{
@@ -200,6 +211,7 @@ func Test_ComputeTerraformImportForResource(t *testing.T) {
 			expected: TerraformImport{
 				ResourceAddress: "example.address",
 				ResourceID:      "test_id",
+				SupportsImport:  true,
 			},
 		},
 	}

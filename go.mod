@@ -3,7 +3,7 @@ module github.com/kishaningithub/tf-import-gen
 go 1.21
 
 require (
-	github.com/hashicorp/terraform-json v0.18.0
+	github.com/hashicorp/terraform-json v0.20.0
 	github.com/spf13/cobra v1.8.0
 	github.com/stretchr/testify v1.8.4
 )

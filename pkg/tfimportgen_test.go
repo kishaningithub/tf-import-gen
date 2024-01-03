@@ -21,10 +21,12 @@ func Test_GenerateImports_ShouldGenerateImportsForAllResourcesWhenNoFiltersAreGi
 				{
 					ResourceAddress: "aws_glue_catalog_database.test_db",
 					ResourceID:      "id_test_db",
+					SupportsImport:  true,
 				},
 				{
 					ResourceAddress: "aws_iam_instance_profile.test_instance_profile",
 					ResourceID:      "id_test_instance_profile",
+					SupportsImport:  true,
 				},
 			},
 		},
@@ -35,10 +37,12 @@ func Test_GenerateImports_ShouldGenerateImportsForAllResourcesWhenNoFiltersAreGi
 				{
 					ResourceAddress: "module.test_mwaa.aws_iam_policy.test_mwaa_permissions",
 					ResourceID:      "id_test_mwaa_permissions",
+					SupportsImport:  true,
 				},
 				{
 					ResourceAddress: "module.test_mwaa.aws_mwaa_environment.test_airflow_env",
 					ResourceID:      "id_test_airflow_env",
+					SupportsImport:  true,
 				},
 			},
 		},
@@ -49,10 +53,12 @@ func Test_GenerateImports_ShouldGenerateImportsForAllResourcesWhenNoFiltersAreGi
 				{
 					ResourceAddress: "module.test_mwaa.nested1.nested2.aws_iam_policy.test_mwaa_permissions",
 					ResourceID:      "id_test_mwaa_permissions",
+					SupportsImport:  true,
 				},
 				{
 					ResourceAddress: "module.test_mwaa.nested1.nested2.aws_mwaa_environment.test_airflow_env",
 					ResourceID:      "id_test_airflow_env",
+					SupportsImport:  true,
 				},
 			},
 		},
@@ -87,10 +93,12 @@ func Test_GenerateImports_ShouldGenerateImportsForResourcesForGivenAddress(t *te
 				{
 					ResourceAddress: "module.test_mwaa.aws_iam_policy.test_mwaa_permissions",
 					ResourceID:      "id_test_mwaa_permissions",
+					SupportsImport:  true,
 				},
 				{
 					ResourceAddress: "module.test_mwaa.aws_mwaa_environment.test_airflow_env",
 					ResourceID:      "id_test_airflow_env",
+					SupportsImport:  true,
 				},
 			},
 		},
@@ -101,6 +109,7 @@ func Test_GenerateImports_ShouldGenerateImportsForResourcesForGivenAddress(t *te
 				{
 					ResourceAddress: "aws_glue_catalog_database.test_db",
 					ResourceID:      "id_test_db",
+					SupportsImport:  true,
 				},
 			},
 		},
@@ -120,4 +129,29 @@ func Test_GenerateImports_ShouldGenerateImportsForResourcesForGivenAddress(t *te
 			require.Equal(t, tt.expected, actual)
 		})
 	}
+}
+
+func Test_GenerateImports_ShouldGenerateHelpfulCommentForResourceThatCannotBeImported(t *testing.T) {
+	stateJsonFile, err := os.Open(filepath.FromSlash("testdata/resources_which_does_not_support_import.json"))
+	require.NoError(t, err)
+	t.Cleanup(func() {
+		_ = stateJsonFile.Close()
+	})
+
+	actual, err := tfimportgen.GenerateImports(stateJsonFile, "")
+
+	require.NoError(t, err)
+	expectedImports := tfimportgen.TerraformImports{
+		tfimportgen.TerraformImport{
+			ResourceAddress: "aws_alb_target_group_attachment.test_alb_target_group_attachment",
+			ResourceID:      "id_test_alb_target_group_attachment",
+			SupportsImport:  false,
+		},
+		tfimportgen.TerraformImport{
+			ResourceAddress: "aws_lb_target_group_attachment.test_lb_target_group_attachment",
+			ResourceID:      "id_test_lb_target_group_attachment",
+			SupportsImport:  false,
+		},
+	}
+	require.Equal(t, expectedImports, actual)
 }
