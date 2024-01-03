@@ -10,6 +10,7 @@ var _ fmt.Stringer = TerraformImport{}
 type TerraformImport struct {
 	ResourceAddress string
 	ResourceID      string
+	SupportsImport  bool
 }
 
 func (terraformImport TerraformImport) String() string {
@@ -17,6 +18,10 @@ func (terraformImport TerraformImport) String() string {
   to = %s
   id = "%s"
 }`
+	if !terraformImport.SupportsImport {
+		importTemplate = `# resource "%s" with identifier "%s" does not support import operation. Kindly refer resource documentation for more info.`
+	}
+
 	return fmt.Sprintln(fmt.Sprintf(importTemplate, terraformImport.ResourceAddress, terraformImport.ResourceID))
 }
 

@@ -7,10 +7,21 @@ import (
 )
 
 func computeTerraformImportForResource(resource parser.TerraformResource) TerraformImport {
-	return TerraformImport{
-		ResourceAddress: resource.Address,
-		ResourceID:      computeResourceID(resource),
+	switch resource.Type {
+	case "aws_alb_target_group_attachment", "aws_lb_target_group_attachment":
+		return TerraformImport{
+			SupportsImport:  false,
+			ResourceAddress: resource.Address,
+			ResourceID:      computeResourceID(resource),
+		}
+	default:
+		return TerraformImport{
+			SupportsImport:  true,
+			ResourceAddress: resource.Address,
+			ResourceID:      computeResourceID(resource),
+		}
 	}
+
 }
 
 func computeResourceID(resource parser.TerraformResource) string {

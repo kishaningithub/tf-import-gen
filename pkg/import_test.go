@@ -11,6 +11,7 @@ func TestImport_ShouldSerializeAsTerraformImportStatements(t *testing.T) {
 	tfImport := tfimportgen.TerraformImport{
 		ResourceAddress: "aws_glue_catalog_database.test_db",
 		ResourceID:      "id_test_db",
+		SupportsImport:  true,
 	}
 
 	expectedResult := `import {
@@ -30,10 +31,12 @@ func TestImports_ShouldSerializeAsMultipleTerraformImportStatements(t *testing.T
 		{
 			ResourceAddress: "aws_glue_catalog_database.test_db",
 			ResourceID:      "id_test_db",
+			SupportsImport:  true,
 		},
 		{
 			ResourceAddress: "aws_iam_instance_profile.test_instance_profile",
 			ResourceID:      "id_test_instance_profile",
+			SupportsImport:  true,
 		},
 	}
 
@@ -53,4 +56,16 @@ import {
 	require.Equal(t, expectedResult, fmt.Sprint(imports))
 	require.Equal(t, expectedResult, fmt.Sprintf("%s", imports))
 	require.Equal(t, expectedResult, fmt.Sprintf("%v", imports))
+}
+
+func TestImport_ShouldGenerateHelpfulMessageWhenResourceDoesNotSupportImport(t *testing.T) {
+	tfImport := tfimportgen.TerraformImport{
+		SupportsImport:  false,
+		ResourceAddress: "aws_alb_target_group_attachment.test_alb_target_group_attachment",
+		ResourceID:      "id_test_alb_target_group_attachment",
+	}
+
+	expectedResult := `# resource "aws_alb_target_group_attachment.test_alb_target_group_attachment" with identifier "id_test_alb_target_group_attachment" does not support import operation. Kindly refer resource documentation for more info.`
+
+	require.Equal(t, fmt.Sprintln(expectedResult), fmt.Sprint(tfImport))
 }
