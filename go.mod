@@ -1,6 +1,6 @@
 module github.com/kishaningithub/tf-import-gen
 
-go 1.21
+go 1.22
 
 require (
 	github.com/hashicorp/terraform-json v0.21.0
