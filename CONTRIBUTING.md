@@ -10,5 +10,7 @@
 - To run only the tests, run command `make test`.
 
 ## Upgrading dependencies
-- For code, run command `make update-deps`
+
+- For golang, to upgrade the golang version in [go.mod](./go.mod) file.
+- For code dependencies, run command `make update-deps`
 - For actions, go inside the yamls present in the [workflows](.github/workflows/) and bump the versions.
