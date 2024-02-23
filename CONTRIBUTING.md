@@ -7,7 +7,7 @@
   installed.
 - To format the code, run command `make fmt`.
 - To build the project, run command `make build`.
-- To run the test suite, run command `make test`.
+- To run only the tests, run command `make test`.
 
 ## Upgrading dependencies
 - For code, run command `make update-deps`

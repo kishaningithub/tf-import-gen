@@ -30,14 +30,10 @@ brew install kishaningithub/tap/tf-import-gen
 
 ### Using docker
 
-Pulling the image
 ```bash
-docker pull ghcr.io/kishaningithub/tf-import-gen:0.1.0
-```
+alias tf-import-gen="docker run -i ghcr.io/kishaningithub/tf-import-gen:latest"
 
-Running the image in interactive mode
-```bash
-docker run -it ghcr.io/kishaningithub/tf-import-gen:0.1.0
+terraform show -json | tf-import-gen
 ```
 
 ### Others
