@@ -23,7 +23,7 @@ brews:
   - repository:
       owner: kishaningithub
       name: homebrew-tap
-    folder: Formula
+    directory: Formula
     homepage: https://github.com/kishaningithub/tf-import-gen
     description: Tool to generate terraform import statements to simplify state migrations from one terraform code base to another
     license: MIT
