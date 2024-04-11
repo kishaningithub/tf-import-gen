@@ -3,25 +3,28 @@ package tfimportgen
 import (
 	"fmt"
 	"github.com/kishaningithub/tf-import-gen/pkg/internal/parser"
+	"slices"
 	"strings"
 )
 
 func computeTerraformImportForResource(resource parser.TerraformResource) TerraformImport {
-	switch resource.Type {
-	case "aws_alb_target_group_attachment", "aws_lb_target_group_attachment":
+	resourcesWhichDoNotSupportImport := []string{
+		"aws_alb_target_group_attachment",
+		"aws_lb_target_group_attachment",
+		"aws_lakeformation_data_lake_settings",
+	}
+	if slices.Contains(resourcesWhichDoNotSupportImport, resource.Type) {
 		return TerraformImport{
 			SupportsImport:  false,
 			ResourceAddress: resource.Address,
 			ResourceID:      computeResourceID(resource),
 		}
-	default:
-		return TerraformImport{
-			SupportsImport:  true,
-			ResourceAddress: resource.Address,
-			ResourceID:      computeResourceID(resource),
-		}
 	}
-
+	return TerraformImport{
+		SupportsImport:  true,
+		ResourceAddress: resource.Address,
+		ResourceID:      computeResourceID(resource),
+	}
 }
 
 func computeResourceID(resource parser.TerraformResource) string {
@@ -45,6 +48,8 @@ func computeResourceID(resource parser.TerraformResource) string {
 		return fmt.Sprintf("%s/%s/%s", getValue("rest_api_id"), getValue("stage_name"), getValue("method_path"))
 	case "aws_api_gateway_method", "aws_api_gateway_integration":
 		return fmt.Sprintf("%s/%s/%s", getValue("rest_api_id"), getValue("resource_id"), getValue("http_method"))
+	case "aws_route_table_association":
+		return fmt.Sprintf("%s/%s", getValue("subnet_id"), getValue("route_table_id"))
 	default:
 		return getValue("id")
 	}

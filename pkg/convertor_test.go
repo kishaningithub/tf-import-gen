@@ -200,6 +200,22 @@ func Test_ComputeTerraformImportForResource(t *testing.T) {
 			},
 		},
 		{
+			name: "For aws_route_table_association",
+			terraformResource: parser.TerraformResource{
+				Address: "aws_route_table_association.test",
+				Type:    "aws_route_table_association",
+				AttributeValues: map[string]any{
+					"subnet_id":      "subnet_id",
+					"route_table_id": "route_table_id",
+				},
+			},
+			expected: TerraformImport{
+				ResourceAddress: "aws_route_table_association.test",
+				ResourceID:      "subnet_id/route_table_id",
+				SupportsImport:  true,
+			},
+		},
+		{
 			name: "For everything else",
 			terraformResource: parser.TerraformResource{
 				Address: "example.address",
