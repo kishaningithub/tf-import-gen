@@ -216,6 +216,22 @@ func Test_ComputeTerraformImportForResource(t *testing.T) {
 			},
 		},
 		{
+			name: "For aws_iam_user_policy_attachment",
+			terraformResource: parser.TerraformResource{
+				Address: "aws_iam_user_policy_attachment.test",
+				Type:    "aws_iam_user_policy_attachment",
+				AttributeValues: map[string]any{
+					"policy_arn": "policy_arn",
+					"user":       "user",
+				},
+			},
+			expected: TerraformImport{
+				ResourceAddress: "aws_iam_user_policy_attachment.test",
+				ResourceID:      "user/policy_arn",
+				SupportsImport:  true,
+			},
+		},
+		{
 			name: "For everything else",
 			terraformResource: parser.TerraformResource{
 				Address: "example.address",
