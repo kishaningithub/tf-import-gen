@@ -1,0 +1,27 @@
+name: Create tag
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        type: string
+        description: Name of the tag (Eg v1.0.0)
+
+jobs:
+  create-tag:
+    name: Create tag
+    if: ${{ inputs.tag != '' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch "main"
+        uses: actions/checkout@v4
+        with:
+          ref: 'main'
+          fetch-depth: 0
+          fetch-tags: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create tag ${{ inputs.tag }}
+        run: |
+          git tag ${{ inputs.tag }}
+          git push --tags
