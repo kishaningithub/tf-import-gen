@@ -8,7 +8,7 @@ on:
         description: Name of the tag (Eg v1.0.0)
 
 permissions:
-  packages: write
+  contents: write
 
 jobs:
   create-tag:
