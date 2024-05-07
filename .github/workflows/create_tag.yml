@@ -7,6 +7,9 @@ on:
         type: string
         description: Name of the tag (Eg v1.0.0)
 
+permissions:
+  packages: write
+
 jobs:
   create-tag:
     name: Create tag
