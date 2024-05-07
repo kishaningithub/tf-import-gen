@@ -12,11 +12,13 @@ type TerraformResource struct {
 
 type TerraformResources []TerraformResource
 
-func (resources TerraformResources) FilterByAddress(address string) TerraformResources {
+func (resources TerraformResources) FilterByAddresses(addresses ...string) TerraformResources {
 	var filteredResources TerraformResources
 	for _, resource := range resources {
-		if strings.HasPrefix(resource.Address, address) {
-			filteredResources = append(filteredResources, resource)
+		for _, address := range addresses {
+			if strings.HasPrefix(resource.Address, address) {
+				filteredResources = append(filteredResources, resource)
+			}
 		}
 	}
 	return filteredResources

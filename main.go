@@ -12,7 +12,7 @@ var Version = "dev"
 
 func main() {
 	var rootCmd = &cobra.Command{
-		Use:   "tf-import-gen [flags] address",
+		Use:   "tf-import-gen [flags] address...",
 		Short: "Generate terraform import statements",
 		Long: strings.TrimSpace(`
 Generate terraform import statements to simplify state migrations from one terraform code base to another.
@@ -34,6 +34,9 @@ terraform show -json | tf-import-gen module.example
 
 ## Generating import statements by resource
 terraform show -json | tf-import-gen aws_instance.example
+
+## Generating import statements by multiple resources
+terraform show -json | tf-import-gen aws_instance.example module.example
 
 ## Generating import statements for all resources
 terraform show -json | tf-import-gen

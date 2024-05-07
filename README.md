@@ -69,6 +69,27 @@ import {
 }
 ```
 
+### Generating import statements by multiple resource
+
+```bash
+$ terraform show -json | tf-import-gen aws_instance.example module.example
+
+import {
+  to = aws_instance.example
+  id = "i-123456789012"
+}
+
+import {
+  to = module.example.aws_glue_catalog_database.example_db
+  id = "123456789012:example_db"
+}
+
+import {
+  to = module.example.aws_iam_instance_profile.example_instance_profile
+  id = "example_instance_profile"
+}
+```
+
 ### Generating import statements for all resources
 
 ```bash
@@ -108,7 +129,7 @@ addresses, such as:
   module.example.aws_instance.example
 
 Usage:
-  tf-import-gen [flags] address
+  tf-import-gen [flags] address...
 
 Examples:
 
@@ -117,6 +138,9 @@ terraform show -json | tf-import-gen module.example
 
 ## Generating import statements by resource
 terraform show -json | tf-import-gen aws_instance.example
+
+## Generating import statements by multiple resources
+terraform show -json | tf-import-gen aws_instance.example module.example
 
 ## Generating import statements for all resources
 terraform show -json | tf-import-gen
