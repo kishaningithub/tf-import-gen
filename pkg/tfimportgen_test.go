@@ -209,3 +209,38 @@ func Test_GenerateImports_ShouldGenerateImportsForResourcesForMultipleAddresses(
 		})
 	}
 }
+
+func Test_GenerateImports_ShouldNotGenerateDuplicateImportsForResourcesForMultipleAddresses(t *testing.T) {
+	tests := []struct {
+		name     string
+		address  []string
+		expected tfimportgen.TerraformImports
+	}{
+		{
+			name:    "filtering by module",
+			address: []string{"aws_glue_catalog_database.test_db", "aws_glue_catalog_database.test_db"},
+			expected: tfimportgen.TerraformImports{
+				{
+					ResourceAddress: "aws_glue_catalog_database.test_db",
+					ResourceID:      "id_test_db",
+					SupportsImport:  true,
+				},
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			stateJsonFile, err := os.Open(filepath.FromSlash("testdata/resources_in_root_and_child_modules.json"))
+			require.NoError(t, err)
+			t.Cleanup(func() {
+				_ = stateJsonFile.Close()
+			})
+
+			actual, err := tfimportgen.GenerateImports(stateJsonFile, tt.address)
+
+			require.NoError(t, err)
+			require.Equal(t, tt.expected, actual)
+		})
+	}
+}
