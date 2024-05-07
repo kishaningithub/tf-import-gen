@@ -12,7 +12,7 @@ type TerraformResource struct {
 
 type TerraformResources []TerraformResource
 
-func (resources TerraformResources) FilterByAddresses(addresses ...string) TerraformResources {
+func (resources TerraformResources) FilterByAddresses(addresses []string) TerraformResources {
 	var filteredResources TerraformResources
 	for _, resource := range resources {
 		for _, address := range addresses {

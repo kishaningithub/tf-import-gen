@@ -1,8 +1,10 @@
 package tfimportgen_test
 
 import (
+	"bytes"
 	tfimportgen "github.com/kishaningithub/tf-import-gen/pkg"
 	"github.com/stretchr/testify/require"
+	"io"
 	"os"
 	"path/filepath"
 	"testing"
@@ -71,9 +73,16 @@ func Test_GenerateImports_ShouldGenerateImportsForAllResourcesWhenNoFiltersAreGi
 			t.Cleanup(func() {
 				_ = stateJsonFile.Close()
 			})
+			stateJsonFileBytes, err := io.ReadAll(stateJsonFile)
+			require.NoError(t, err)
+			stateJson := bytes.NewBuffer(stateJsonFileBytes)
 
-			actual, err := tfimportgen.GenerateImports(stateJsonFile, "")
+			actual, err := tfimportgen.GenerateImports(stateJson, []string{""})
+			require.NoError(t, err)
+			require.Equal(t, tt.expected, actual)
 
+			stateJson = bytes.NewBuffer(stateJsonFileBytes)
+			actual, err = tfimportgen.GenerateImports(stateJson, nil)
 			require.NoError(t, err)
 			require.Equal(t, tt.expected, actual)
 		})
@@ -83,12 +92,12 @@ func Test_GenerateImports_ShouldGenerateImportsForAllResourcesWhenNoFiltersAreGi
 func Test_GenerateImports_ShouldGenerateImportsForResourcesForGivenAddress(t *testing.T) {
 	tests := []struct {
 		name     string
-		address  string
+		address  []string
 		expected tfimportgen.TerraformImports
 	}{
 		{
 			name:    "filtering by module",
-			address: "module.test_mwaa",
+			address: []string{"module.test_mwaa"},
 			expected: tfimportgen.TerraformImports{
 				{
 					ResourceAddress: "module.test_mwaa.aws_iam_policy.test_mwaa_permissions",
@@ -104,7 +113,7 @@ func Test_GenerateImports_ShouldGenerateImportsForResourcesForGivenAddress(t *te
 		},
 		{
 			name:    "filtering by resource",
-			address: "aws_glue_catalog_database.test_db",
+			address: []string{"aws_glue_catalog_database.test_db"},
 			expected: tfimportgen.TerraformImports{
 				{
 					ResourceAddress: "aws_glue_catalog_database.test_db",
@@ -138,7 +147,7 @@ func Test_GenerateImports_ShouldGenerateHelpfulCommentForResourceThatCannotBeImp
 		_ = stateJsonFile.Close()
 	})
 
-	actual, err := tfimportgen.GenerateImports(stateJsonFile, "")
+	actual, err := tfimportgen.GenerateImports(stateJsonFile, []string{""})
 
 	require.NoError(t, err)
 	expectedImports := tfimportgen.TerraformImports{
@@ -156,7 +165,7 @@ func Test_GenerateImports_ShouldGenerateHelpfulCommentForResourceThatCannotBeImp
 	require.Equal(t, expectedImports, actual)
 }
 
-func Test_GenerateImports_ShouldGenerateImportsForResourcesForGivenAddresses(t *testing.T) {
+func Test_GenerateImports_ShouldGenerateImportsForResourcesForMultipleAddresses(t *testing.T) {
 	tests := []struct {
 		name     string
 		address  []string
@@ -193,7 +202,7 @@ func Test_GenerateImports_ShouldGenerateImportsForResourcesForGivenAddresses(t *
 				_ = stateJsonFile.Close()
 			})
 
-			actual, err := tfimportgen.GenerateImports(stateJsonFile, tt.address...)
+			actual, err := tfimportgen.GenerateImports(stateJsonFile, tt.address)
 
 			require.NoError(t, err)
 			require.Equal(t, tt.expected, actual)

@@ -42,11 +42,11 @@ terraform show -json | tf-import-gen aws_instance.example module.example
 terraform show -json | tf-import-gen
 `,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			address := ""
+			addresses := []string{""}
 			if len(os.Args) > 1 {
-				address = os.Args[1]
+				addresses = os.Args[1:]
 			}
-			imports, err := tfimportgen.GenerateImports(os.Stdin, address)
+			imports, err := tfimportgen.GenerateImports(os.Stdin, addresses)
 			if err != nil {
 				return err
 			}

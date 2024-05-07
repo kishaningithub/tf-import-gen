@@ -5,13 +5,15 @@ import (
 	"io"
 )
 
-func GenerateImports(stateJsonReader io.Reader, address ...string) (TerraformImports, error) {
+func GenerateImports(stateJsonReader io.Reader, addresses []string) (TerraformImports, error) {
 	resources, err := parser.NewTerraformStateJsonParser(stateJsonReader).Parse()
 	if err != nil {
 		return nil, err
 	}
 
-	resources = resources.FilterByAddresses(address...)
+	if addresses != nil {
+		resources = resources.FilterByAddresses(addresses)
+	}
 
 	var imports TerraformImports
 	for _, resource := range resources {
