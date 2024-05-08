@@ -85,6 +85,26 @@ func Test_ComputeTerraformImportForResource(t *testing.T) {
 			},
 		},
 		{
+			name: "For aws_security_group_rule with prefix_list_ids",
+			terraformResource: parser.TerraformResource{
+				Address: "aws_security_group_rule.test",
+				Type:    "aws_security_group_rule",
+				AttributeValues: map[string]any{
+					"security_group_id": "security-group-id",
+					"type":              "type",
+					"protocol":          "protocol",
+					"from_port":         1234,
+					"to_port":           5678,
+					"prefix_list_ids":   []any{"prefix-list-1", "prefix-list-2"},
+				},
+			},
+			expected: TerraformImport{
+				ResourceAddress: "aws_security_group_rule.test",
+				ResourceID:      "security-group-id_type_protocol_1234_5678_prefix-list-1_prefix-list-2",
+				SupportsImport:  true,
+			},
+		},
+		{
 			name: "For aws_api_gateway_resource",
 			terraformResource: parser.TerraformResource{
 				Address: "aws_api_gateway_resource.test",
