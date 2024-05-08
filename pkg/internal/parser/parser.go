@@ -17,22 +17,12 @@ func (resources TerraformResources) FilterByAddresses(addresses []string) Terraf
 	for _, resource := range resources {
 		for _, address := range addresses {
 			if strings.HasPrefix(resource.Address, address) {
-				if !filteredResources.contains(resource) {
-					filteredResources = append(filteredResources, resource)
-				}
+				filteredResources = append(filteredResources, resource)
+				break
 			}
 		}
 	}
 	return filteredResources
-}
-
-func (resources TerraformResources) contains(r TerraformResource) bool {
-	for _, resource := range resources {
-		if resource.Address == r.Address {
-			return true
-		}
-	}
-	return false
 }
 
 type TerraformStateParser interface {
