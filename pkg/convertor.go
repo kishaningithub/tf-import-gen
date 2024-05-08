@@ -74,16 +74,27 @@ func computeResourceIDForAWSSecurityGroupRole(resource parser.TerraformResource)
 	if isCidrBlocksValid {
 		isCidrBlocksValid = len(cidrBlocks) > 0
 	}
+	prefixListIds, isPrefixListIdsValid := resource.AttributeValues["prefix_list_ids"].([]any)
+	if isPrefixListIdsValid {
+		isPrefixListIdsValid = len(prefixListIds) > 0
+	}
 	resourceID := fmt.Sprintf("%s_%s_%s_%s_%s", securityGroupId, securityGroupType, protocol, fromPort, toPort)
 	if isSourceSecurityGroupIdValid {
 		return fmt.Sprintf("%s_%s", resourceID, sourceSecurityGroupId)
 	}
 	if isCidrBlocksValid {
-		var cidrStringBlocks []string
-		for _, cidrBlock := range cidrBlocks {
-			cidrStringBlocks = append(cidrStringBlocks, fmt.Sprint(cidrBlock))
-		}
-		return fmt.Sprintf("%s_%s", resourceID, strings.Join(cidrStringBlocks, "_"))
+		return fmt.Sprintf("%s_%s", resourceID, strings.Join(convertToStrings(cidrBlocks), "_"))
+	}
+	if isPrefixListIdsValid {
+		return fmt.Sprintf("%s_%s", resourceID, strings.Join(convertToStrings(prefixListIds), "_"))
 	}
 	return resourceID
+}
+
+func convertToStrings(source []any) []string {
+	var result []string
+	for _, element := range source {
+		result = append(result, fmt.Sprint(element))
+	}
+	return result
 }
