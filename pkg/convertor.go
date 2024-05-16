@@ -12,6 +12,7 @@ func computeTerraformImportForResource(resource parser.TerraformResource) Terraf
 		"aws_alb_target_group_attachment",
 		"aws_lb_target_group_attachment",
 		"aws_lakeformation_data_lake_settings",
+		"aws_lakeformation_permissions",
 	}
 	if slices.Contains(resourcesWhichDoNotSupportImport, resource.Type) {
 		return TerraformImport{
