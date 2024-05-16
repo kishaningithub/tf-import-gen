@@ -252,6 +252,22 @@ func Test_ComputeTerraformImportForResource(t *testing.T) {
 			},
 		},
 		{
+			name: "For aws_emr_instance_group",
+			terraformResource: parser.TerraformResource{
+				Address: "aws_emr_instance_group.test",
+				Type:    "aws_emr_instance_group",
+				AttributeValues: map[string]any{
+					"id":         "id",
+					"cluster_id": "cluster_id",
+				},
+			},
+			expected: TerraformImport{
+				ResourceAddress: "aws_emr_instance_group.test",
+				ResourceID:      "cluster_id/id",
+				SupportsImport:  true,
+			},
+		},
+		{
 			name: "For everything else",
 			terraformResource: parser.TerraformResource{
 				Address: "example.address",
