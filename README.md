@@ -15,6 +15,7 @@ Tool to generate terraform import statements to simplify state migrations from o
   * [Examples](#examples)
     * [Generating import statements by module](#generating-import-statements-by-module)
     * [Generating import statements by resource](#generating-import-statements-by-resource)
+    * [Generating import statements by multiple resource](#generating-import-statements-by-multiple-resource)
     * [Generating import statements for all resources](#generating-import-statements-for-all-resources)
   * [Usage](#usage)
   * [Contributing](#contributing)
