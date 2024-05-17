@@ -5,6 +5,7 @@ import (
 	"fmt"
 	tfjson "github.com/hashicorp/terraform-json"
 	"io"
+	"strings"
 )
 
 var (
@@ -50,7 +51,7 @@ func (parser TerraformStateJsonParser) parseResources(resources []*tfjson.StateR
 			continue
 		}
 		resourceImportModel = append(resourceImportModel, TerraformResource{
-			Address:         parser.computeResourceAddress(moduleAddress, resource.Address),
+			Address:         parser.computeResourceAddressIncludingModule(moduleAddress, resource),
 			Type:            resource.Type,
 			AttributeValues: resource.AttributeValues,
 		})
@@ -58,9 +59,21 @@ func (parser TerraformStateJsonParser) parseResources(resources []*tfjson.StateR
 	return resourceImportModel
 }
 
-func (parser TerraformStateJsonParser) computeResourceAddress(moduleAddress string, resourceAddress string) string {
+func (parser TerraformStateJsonParser) computeResourceAddressIncludingModule(moduleAddress string, resource *tfjson.StateResource) string {
 	if len(moduleAddress) == 0 {
-		return resourceAddress
+		return parser.computeResourceAddress(resource)
 	}
-	return fmt.Sprintf("%s.%s", moduleAddress, resourceAddress)
+	return fmt.Sprintf("%s.%s", moduleAddress, parser.computeResourceAddress(resource))
+}
+
+func (parser TerraformStateJsonParser) computeResourceAddress(resource *tfjson.StateResource) string {
+	if resource.Index != nil && !strings.HasSuffix(resource.Address, "]") {
+		switch resource.Index.(type) {
+		case float64, float32, int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64:
+			return fmt.Sprintf("%s[%v]", resource.Address, resource.Index)
+		default:
+			return fmt.Sprintf("%s[%q]", resource.Address, resource.Index)
+		}
+	}
+	return resource.Address
 }

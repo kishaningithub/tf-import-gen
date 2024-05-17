@@ -7,6 +7,7 @@ import (
 type TerraformResource struct {
 	Address         string
 	Type            string
+	Index           any
 	AttributeValues map[string]any
 }
 
