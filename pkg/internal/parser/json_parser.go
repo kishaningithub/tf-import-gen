@@ -60,10 +60,14 @@ func (parser TerraformStateJsonParser) parseResources(resources []*tfjson.StateR
 }
 
 func (parser TerraformStateJsonParser) computeResourceAddressIncludingModule(moduleAddress string, resource *tfjson.StateResource) string {
+	resourceAddress := parser.computeResourceAddress(resource)
 	if len(moduleAddress) == 0 {
-		return parser.computeResourceAddress(resource)
+		return resourceAddress
 	}
-	return fmt.Sprintf("%s.%s", moduleAddress, parser.computeResourceAddress(resource))
+	if strings.HasPrefix(resourceAddress, moduleAddress) {
+		return resourceAddress
+	}
+	return fmt.Sprintf("%s.%s", moduleAddress, resourceAddress)
 }
 
 func (parser TerraformStateJsonParser) computeResourceAddress(resource *tfjson.StateResource) string {

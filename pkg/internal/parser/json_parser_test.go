@@ -156,6 +156,54 @@ func TestTerraformStateJsonParserAddressComputationForRootResources(t *testing.T
 	}
 }
 
+func TestTerraformStateJsonParserDoesNotAddModuleNameTwice(t *testing.T) {
+	tests := []struct {
+		name                    string
+		inputTerraformStateJson string
+		computedAddress         string
+	}{
+		{
+			name: "1 level repeated module address",
+			inputTerraformStateJson: `
+				{
+				  "format_version": "0.1",
+				  "terraform_version": "0.12.31",
+				  "values": {
+					"root_module": {
+					  "child_modules": [
+						{
+						  "resources": [
+							{
+							  "address": "module.test_mwaa.aws_iam_policy.test_mwaa_permissions",
+							  "mode": "managed",
+							  "type": "aws_iam_policy",
+							  "name": "test_mwaa_permissions",
+							  "provider_name": "aws",
+							  "values": {
+								"id": "id_test_mwaa_permissions"
+							  }
+							}
+						  ],
+						  "address": "module.test_mwaa"
+						}
+					  ]
+					}
+				  }
+				}
+`,
+			computedAddress: "module.test_mwaa.aws_iam_policy.test_mwaa_permissions",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			parser := NewTerraformStateJsonParser(bytes.NewBufferString(tt.inputTerraformStateJson))
+			actualResources, err := parser.Parse()
+			require.NoError(t, err)
+			require.Equal(t, tt.computedAddress, actualResources[0].Address)
+		})
+	}
+}
+
 func TestTerraformStateJsonParserAddressComputationForNestedResources(t *testing.T) {
 	tests := []struct {
 		name                    string
