@@ -8,7 +8,7 @@ builds:
   - main: .
     binary: tf-import-gen
     ldflags:
-      - -X main.Version={{.Version}}
+      - -s -w -X main.Version={{.Version}}
     goos:
       - windows
       - darwin
