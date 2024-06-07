@@ -11,6 +11,7 @@ Tool to generate terraform import statements to simplify state migrations from o
   * [Installation](#installation)
     * [Using Homebrew (Mac and linux)](#using-homebrew-mac-and-linux)
     * [Using docker](#using-docker)
+    * [Using pkgx](#using-pkgx)
     * [Others](#others)
   * [Examples](#examples)
     * [Generating import statements by module](#generating-import-statements-by-module)
@@ -35,6 +36,20 @@ brew install kishaningithub/tap/tf-import-gen
 alias tf-import-gen="docker run -i ghcr.io/kishaningithub/tf-import-gen:latest"
 
 terraform show -json | tf-import-gen
+```
+
+### Using pkgx
+
+```bash
+terraform show -json | pkgx tf-import-gen@latest
+```
+
+or if you prefer the env style which only adds tf-import-gen to your current shell session
+
+```bash
+env +tf-import-gen@latest
+
+terraform show -json | tf-import-gen --version
 ```
 
 ### Others
