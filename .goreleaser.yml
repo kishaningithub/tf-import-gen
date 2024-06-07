@@ -41,8 +41,7 @@ nfpms:
       - rpm
 
 kos:
-  - main: .
-    base_image: alpine
+  - base_image: alpine
     repository: ghcr.io/kishaningithub/tf-import-gen
     platforms:
       - linux/amd64
