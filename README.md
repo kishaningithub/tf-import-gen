@@ -49,7 +49,7 @@ or if you prefer the env style which only adds tf-import-gen to your current she
 ```bash
 env +tf-import-gen@latest
 
-terraform show -json | tf-import-gen --version
+terraform show -json | tf-import-gen
 ```
 
 ### Others
