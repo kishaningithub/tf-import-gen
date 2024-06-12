@@ -268,6 +268,38 @@ func Test_ComputeTerraformImportForResource(t *testing.T) {
 			},
 		},
 		{
+			name: "For aws_backup_selection",
+			terraformResource: parser.TerraformResource{
+				Address: "aws_backup_selection.test",
+				Type:    "aws_backup_selection",
+				AttributeValues: map[string]any{
+					"id":      "id",
+					"plan_id": "plan_id",
+				},
+			},
+			expected: TerraformImport{
+				ResourceAddress: "aws_backup_selection.test",
+				ResourceID:      "plan_id|id",
+				SupportsImport:  true,
+			},
+		},
+		{
+			name: "For aws_vpc_endpoint_route_table_association",
+			terraformResource: parser.TerraformResource{
+				Address: "aws_vpc_endpoint_route_table_association.test",
+				Type:    "aws_vpc_endpoint_route_table_association",
+				AttributeValues: map[string]any{
+					"vpc_endpoint_id": "vpc_endpoint_id",
+					"route_table_id":  "route_table_id",
+				},
+			},
+			expected: TerraformImport{
+				ResourceAddress: "aws_vpc_endpoint_route_table_association.test",
+				ResourceID:      "vpc_endpoint_id/route_table_id",
+				SupportsImport:  true,
+			},
+		},
+		{
 			name: "For everything else",
 			terraformResource: parser.TerraformResource{
 				Address: "example.address",
