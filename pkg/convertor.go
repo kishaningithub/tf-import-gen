@@ -56,6 +56,10 @@ func computeResourceID(resource parser.TerraformResource) string {
 		return fmt.Sprintf("%s/%s", getValue("user"), getValue("policy_arn"))
 	case "aws_emr_instance_group":
 		return fmt.Sprintf("%s/%s", getValue("cluster_id"), getValue("id"))
+	case "aws_backup_selection":
+		return fmt.Sprintf("%s|%s", getValue("plan_id"), getValue("id"))
+	case "aws_vpc_endpoint_route_table_association":
+		return fmt.Sprintf("%s/%s", getValue("vpc_endpoint_id"), getValue("route_table_id"))
 	default:
 		return getValue("id")
 	}
