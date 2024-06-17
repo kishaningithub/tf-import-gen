@@ -22,7 +22,7 @@ jobs:
           ref: 'main'
           fetch-depth: 0
           fetch-tags: true
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GA_GORELEASER_TOKEN }}
 
       - name: Create tag ${{ inputs.tag }}
         run: |
