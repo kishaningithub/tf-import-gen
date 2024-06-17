@@ -300,6 +300,22 @@ func Test_ComputeTerraformImportForResource(t *testing.T) {
 			},
 		},
 		{
+			name: "For aws_cognito_user_pool_client",
+			terraformResource: parser.TerraformResource{
+				Address: "aws_cognito_user_pool_client.test",
+				Type:    "aws_cognito_user_pool_client",
+				AttributeValues: map[string]any{
+					"user_pool_id": "user_pool_id",
+					"id":           "id",
+				},
+			},
+			expected: TerraformImport{
+				ResourceAddress: "aws_cognito_user_pool_client.test",
+				ResourceID:      "user_pool_id/id",
+				SupportsImport:  true,
+			},
+		},
+		{
 			name: "For everything else",
 			terraformResource: parser.TerraformResource{
 				Address: "example.address",
