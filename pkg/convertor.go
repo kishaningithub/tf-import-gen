@@ -14,6 +14,8 @@ func computeTerraformImportForResource(resource parser.TerraformResource) Terraf
 		"aws_lakeformation_data_lake_settings",
 		"aws_lakeformation_permissions",
 		"aws_iam_policy_attachment",
+		"aws_acm_certificate_validation",
+		"aws_ami_copy",
 	}
 	if slices.Contains(resourcesWhichDoNotSupportImport, resource.Type) {
 		return TerraformImport{
