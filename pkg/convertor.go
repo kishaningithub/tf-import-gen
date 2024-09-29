@@ -64,6 +64,8 @@ func computeResourceID(resource parser.TerraformResource) string {
 		return fmt.Sprintf("%s/%s", getValue("vpc_endpoint_id"), getValue("route_table_id"))
 	case "aws_cognito_user_pool_client":
 		return fmt.Sprintf("%s/%s", getValue("user_pool_id"), getValue("id"))
+	case "aws_ecs_cluster":
+		return fmt.Sprintf("%s", getValue("name"))
 	default:
 		return getValue("id")
 	}

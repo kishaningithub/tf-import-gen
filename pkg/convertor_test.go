@@ -316,6 +316,21 @@ func Test_ComputeTerraformImportForResource(t *testing.T) {
 			},
 		},
 		{
+			name: "For aws_ecs_cluster",
+			terraformResource: parser.TerraformResource{
+				Address: "aws_ecs_cluster.test",
+				Type:    "aws_ecs_cluster",
+				AttributeValues: map[string]any{
+					"name": "name",
+				},
+			},
+			expected: TerraformImport{
+				ResourceAddress: "aws_ecs_cluster.test",
+				ResourceID:      "name",
+				SupportsImport:  true,
+			},
+		},
+		{
 			name: "For everything else",
 			terraformResource: parser.TerraformResource{
 				Address: "example.address",
