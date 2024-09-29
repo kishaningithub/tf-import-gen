@@ -346,6 +346,23 @@ func Test_ComputeTerraformImportForResource(t *testing.T) {
 			},
 		},
 		{
+			name: "For aws_wafv2_web_acl",
+			terraformResource: parser.TerraformResource{
+				Address: "aws_wafv2_web_acl.test",
+				Type:    "aws_wafv2_web_acl",
+				AttributeValues: map[string]any{
+					"id":    "id",
+					"name":  "name",
+					"scope": "scope",
+				},
+			},
+			expected: TerraformImport{
+				ResourceAddress: "aws_wafv2_web_acl.test",
+				ResourceID:      "id/name/scope",
+				SupportsImport:  true,
+			},
+		},
+		{
 			name: "For everything else",
 			terraformResource: parser.TerraformResource{
 				Address: "example.address",

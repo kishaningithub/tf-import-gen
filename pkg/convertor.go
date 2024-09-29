@@ -68,6 +68,8 @@ func computeResourceID(resource parser.TerraformResource) string {
 		return fmt.Sprintf("%s", getValue("name"))
 	case "aws_ecs_task_definition":
 		return fmt.Sprintf("%s", getValue("arn"))
+	case "aws_wafv2_web_acl":
+		return fmt.Sprintf("%s/%s/%s", getValue("id"), getValue("name"), getValue("scope"))
 	default:
 		return getValue("id")
 	}
