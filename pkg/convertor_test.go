@@ -379,6 +379,23 @@ func Test_ComputeTerraformImportForResource(t *testing.T) {
 			},
 		},
 		{
+			name: "For aws_appautoscaling_target",
+			terraformResource: parser.TerraformResource{
+				Address: "aws_appautoscaling_target.test",
+				Type:    "aws_appautoscaling_target",
+				AttributeValues: map[string]any{
+					"service_namespace":  "service_namespace",
+					"resource_id":        "resource_id",
+					"scalable_dimension": "scalable_dimension",
+				},
+			},
+			expected: TerraformImport{
+				ResourceAddress: "aws_appautoscaling_target.test",
+				ResourceID:      "service_namespace/resource_id/scalable_dimension",
+				SupportsImport:  true,
+			},
+		},
+		{
 			name: "For everything else",
 			terraformResource: parser.TerraformResource{
 				Address: "example.address",

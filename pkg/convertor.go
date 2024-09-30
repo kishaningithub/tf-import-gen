@@ -72,6 +72,8 @@ func computeResourceID(resource parser.TerraformResource) string {
 		return fmt.Sprintf("%s/%s/%s", getValue("id"), getValue("name"), getValue("scope"))
 	case "aws_autoscaling_schedule":
 		return fmt.Sprintf("%s/%s", getValue("autoscaling_group_name"), getValue("scheduled_action_name"))
+	case "aws_appautoscaling_target":
+		return fmt.Sprintf("%s/%s/%s", getValue("service_namespace"), getValue("resource_id"), getValue("scalable_dimension"))
 	default:
 		return getValue("id")
 	}
