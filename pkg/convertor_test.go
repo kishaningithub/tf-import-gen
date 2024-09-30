@@ -396,6 +396,24 @@ func Test_ComputeTerraformImportForResource(t *testing.T) {
 			},
 		},
 		{
+			name: "For aws_appautoscaling_policy",
+			terraformResource: parser.TerraformResource{
+				Address: "aws_appautoscaling_policy.test",
+				Type:    "aws_appautoscaling_policy",
+				AttributeValues: map[string]any{
+					"service_namespace":  "service_namespace",
+					"resource_id":        "resource_id",
+					"scalable_dimension": "scalable_dimension",
+					"name":               "policy_name",
+				},
+			},
+			expected: TerraformImport{
+				ResourceAddress: "aws_appautoscaling_policy.test",
+				ResourceID:      "service_namespace/resource_id/scalable_dimension/policy_name",
+				SupportsImport:  true,
+			},
+		},
+		{
 			name: "For everything else",
 			terraformResource: parser.TerraformResource{
 				Address: "example.address",
