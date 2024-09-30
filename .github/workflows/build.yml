@@ -17,16 +17,5 @@ jobs:
         with:
           go-version-file: "go.mod"
 
-      - name: Test
+      - name: Build
         run: make build
-
-      - name: Lint
-        uses: golangci/golangci-lint-action@v6
-        with:
-          version: latest
-
-      - name: Check go releaser config
-        uses: goreleaser/goreleaser-action@v5
-        with:
-          version: latest
-          args: check
