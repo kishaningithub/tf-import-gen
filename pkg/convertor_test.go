@@ -363,6 +363,22 @@ func Test_ComputeTerraformImportForResource(t *testing.T) {
 			},
 		},
 		{
+			name: "For aws_autoscaling_schedule",
+			terraformResource: parser.TerraformResource{
+				Address: "aws_autoscaling_schedule.test",
+				Type:    "aws_autoscaling_schedule",
+				AttributeValues: map[string]any{
+					"autoscaling_group_name": "autoscaling_group_name",
+					"scheduled_action_name":  "scheduled_action_name",
+				},
+			},
+			expected: TerraformImport{
+				ResourceAddress: "aws_autoscaling_schedule.test",
+				ResourceID:      "autoscaling_group_name/scheduled_action_name",
+				SupportsImport:  true,
+			},
+		},
+		{
 			name: "For everything else",
 			terraformResource: parser.TerraformResource{
 				Address: "example.address",

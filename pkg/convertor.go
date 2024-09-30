@@ -70,6 +70,8 @@ func computeResourceID(resource parser.TerraformResource) string {
 		return getValue("arn")
 	case "aws_wafv2_web_acl":
 		return fmt.Sprintf("%s/%s/%s", getValue("id"), getValue("name"), getValue("scope"))
+	case "aws_autoscaling_schedule":
+		return fmt.Sprintf("%s/%s", getValue("autoscaling_group_name"), getValue("scheduled_action_name"))
 	default:
 		return getValue("id")
 	}
