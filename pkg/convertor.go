@@ -76,9 +76,18 @@ func computeResourceID(resource parser.TerraformResource) string {
 		return fmt.Sprintf("%s/%s/%s", v("service_namespace"), v("resource_id"), v("scalable_dimension"))
 	case "aws_appautoscaling_policy":
 		return fmt.Sprintf("%s/%s/%s/%s", v("service_namespace"), v("resource_id"), v("scalable_dimension"), v("name"))
+	case "aws_ecs_service":
+		return fmt.Sprintf("%s/%s", getEcsClusterNameFromARN(v("cluster")), v("name"))
 	default:
 		return v("id")
 	}
+}
+
+func getEcsClusterNameFromARN(arn string) string {
+	if parts := strings.Split(arn, "/"); len(parts) == 2 {
+		return parts[1]
+	}
+	return ""
 }
 
 func computeResourceIDForAWSSecurityGroupRole(resource parser.TerraformResource) string {
