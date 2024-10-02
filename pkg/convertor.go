@@ -14,6 +14,8 @@ func computeTerraformImportForResource(resource parser.TerraformResource) Terraf
 		"aws_lakeformation_data_lake_settings",
 		"aws_lakeformation_permissions",
 		"aws_iam_policy_attachment",
+		"aws_acm_certificate_validation",
+		"aws_ami_copy",
 	}
 	if slices.Contains(resourcesWhichDoNotSupportImport, resource.Type) {
 		return TerraformImport{
@@ -30,41 +32,62 @@ func computeTerraformImportForResource(resource parser.TerraformResource) Terraf
 }
 
 func computeResourceID(resource parser.TerraformResource) string {
-	getValue := func(name string) string {
+	v := func(name string) string {
 		return fmt.Sprint(resource.AttributeValues[name])
 	}
 	switch resource.Type {
 	case "aws_iam_role_policy_attachment":
-		return fmt.Sprintf("%s/%s", getValue("role"), getValue("policy_arn"))
+		return fmt.Sprintf("%s/%s", v("role"), v("policy_arn"))
 	case "aws_cloudwatch_event_target":
-		return fmt.Sprintf("%s/%s", getValue("rule"), getValue("target_id"))
+		return fmt.Sprintf("%s/%s", v("rule"), v("target_id"))
 	case "aws_lambda_permission":
-		return fmt.Sprintf("%s/%s", getValue("function_name"), getValue("statement_id"))
+		return fmt.Sprintf("%s/%s", v("function_name"), v("statement_id"))
 	case "aws_security_group_rule":
 		return computeResourceIDForAWSSecurityGroupRole(resource)
 	case "aws_api_gateway_resource", "aws_api_gateway_deployment":
-		return fmt.Sprintf("%s/%s", getValue("rest_api_id"), getValue("id"))
+		return fmt.Sprintf("%s/%s", v("rest_api_id"), v("id"))
 	case "aws_api_gateway_stage":
-		return fmt.Sprintf("%s/%s", getValue("rest_api_id"), getValue("stage_name"))
+		return fmt.Sprintf("%s/%s", v("rest_api_id"), v("stage_name"))
 	case "aws_api_gateway_method_settings":
-		return fmt.Sprintf("%s/%s/%s", getValue("rest_api_id"), getValue("stage_name"), getValue("method_path"))
+		return fmt.Sprintf("%s/%s/%s", v("rest_api_id"), v("stage_name"), v("method_path"))
 	case "aws_api_gateway_method", "aws_api_gateway_integration":
-		return fmt.Sprintf("%s/%s/%s", getValue("rest_api_id"), getValue("resource_id"), getValue("http_method"))
+		return fmt.Sprintf("%s/%s/%s", v("rest_api_id"), v("resource_id"), v("http_method"))
 	case "aws_route_table_association":
-		return fmt.Sprintf("%s/%s", getValue("subnet_id"), getValue("route_table_id"))
+		return fmt.Sprintf("%s/%s", v("subnet_id"), v("route_table_id"))
 	case "aws_iam_user_policy_attachment":
-		return fmt.Sprintf("%s/%s", getValue("user"), getValue("policy_arn"))
+		return fmt.Sprintf("%s/%s", v("user"), v("policy_arn"))
 	case "aws_emr_instance_group":
-		return fmt.Sprintf("%s/%s", getValue("cluster_id"), getValue("id"))
+		return fmt.Sprintf("%s/%s", v("cluster_id"), v("id"))
 	case "aws_backup_selection":
-		return fmt.Sprintf("%s|%s", getValue("plan_id"), getValue("id"))
+		return fmt.Sprintf("%s|%s", v("plan_id"), v("id"))
 	case "aws_vpc_endpoint_route_table_association":
-		return fmt.Sprintf("%s/%s", getValue("vpc_endpoint_id"), getValue("route_table_id"))
+		return fmt.Sprintf("%s/%s", v("vpc_endpoint_id"), v("route_table_id"))
 	case "aws_cognito_user_pool_client":
-		return fmt.Sprintf("%s/%s", getValue("user_pool_id"), getValue("id"))
+		return fmt.Sprintf("%s/%s", v("user_pool_id"), v("id"))
+	case "aws_ecs_cluster":
+		return v("name")
+	case "aws_ecs_task_definition":
+		return v("arn")
+	case "aws_wafv2_web_acl":
+		return fmt.Sprintf("%s/%s/%s", v("id"), v("name"), v("scope"))
+	case "aws_autoscaling_schedule":
+		return fmt.Sprintf("%s/%s", v("autoscaling_group_name"), v("scheduled_action_name"))
+	case "aws_appautoscaling_target":
+		return fmt.Sprintf("%s/%s/%s", v("service_namespace"), v("resource_id"), v("scalable_dimension"))
+	case "aws_appautoscaling_policy":
+		return fmt.Sprintf("%s/%s/%s/%s", v("service_namespace"), v("resource_id"), v("scalable_dimension"), v("name"))
+	case "aws_ecs_service":
+		return fmt.Sprintf("%s/%s", getEcsClusterNameFromARN(v("cluster")), v("name"))
 	default:
-		return getValue("id")
+		return v("id")
 	}
+}
+
+func getEcsClusterNameFromARN(arn string) string {
+	if parts := strings.Split(arn, "/"); len(parts) == 2 {
+		return parts[1]
+	}
+	return ""
 }
 
 func computeResourceIDForAWSSecurityGroupRole(resource parser.TerraformResource) string {

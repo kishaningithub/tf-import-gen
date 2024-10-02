@@ -1,7 +1,11 @@
+# Binary dependencies
+golangci-lint := go run github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+goreleaser := go run github.com/goreleaser/goreleaser/v2@latest
+
 test:
 	go test -race -v ./...
 
-build: download-deps tidy-deps compile test
+build: download-deps tidy-deps compile test lint
 
 fmt:
 	gofmt -l -s -w .
@@ -18,3 +22,7 @@ update-deps:
 
 compile:
 	go build -v ./...
+
+lint:
+	$(golangci-lint) run
+	$(goreleaser) check
