@@ -26,3 +26,6 @@ compile:
 lint:
 	$(golangci-lint) run
 	$(goreleaser) check
+
+release:
+	$(goreleaser) release --clean
