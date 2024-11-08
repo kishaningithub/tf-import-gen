@@ -16,6 +16,17 @@ func computeTerraformImportForResource(resource parser.TerraformResource) Terraf
 		"aws_iam_policy_attachment",
 		"aws_acm_certificate_validation",
 		"aws_ami_copy",
+		"google_storage_default_object",
+		"google_storage_default_object_acl",
+		"google_storage_bucket_acl",
+		"google_project_service_identity",
+		"google_project_default_service_accounts",
+		"google_compute_instance_from_template",
+		"google_pubsub_subscription_iam_member",
+		"google_pubsub_subscription_iam_binding",
+		"google_compute_instance_template",
+		"google_iap_tunnel_instance_iam_binding",
+		"local_file",
 	}
 	if slices.Contains(resourcesWhichDoNotSupportImport, resource.Type) {
 		return TerraformImport{
@@ -35,7 +46,9 @@ func computeResourceID(resource parser.TerraformResource) string {
 	v := func(name string) string {
 		return fmt.Sprint(resource.AttributeValues[name])
 	}
+
 	switch resource.Type {
+	// aws resources
 	case "aws_iam_role_policy_attachment":
 		return fmt.Sprintf("%s/%s", v("role"), v("policy_arn"))
 	case "aws_cloudwatch_event_target":
@@ -78,6 +91,84 @@ func computeResourceID(resource parser.TerraformResource) string {
 		return fmt.Sprintf("%s/%s/%s/%s", v("service_namespace"), v("resource_id"), v("scalable_dimension"), v("name"))
 	case "aws_ecs_service":
 		return fmt.Sprintf("%s/%s", getEcsClusterNameFromARN(v("cluster")), v("name"))
+
+	// gcp resources
+	case "google_bigquery_dataset_iam_member":
+		return fmt.Sprintf("projects/%s/datasets/%s %s %s", v("project"), v("dataset_id"), v("role"), v("member"))
+	case "google_bigquery_table_iam_member":
+		return fmt.Sprintf("%s %s %s", v("table_id"), v("role"), v("member"))
+	case "google_service_account_iam_member":
+		return fmt.Sprintf("%s %s %s", v("service_account_id"), v("role"), v("member"))
+	case "google_service_account_iam_binding":
+		return fmt.Sprintf("%s %s", v("service_account_id"), v("role"))
+	case "google_privateca_ca_pool_iam_member":
+		condition := map[string]any{}
+		conditions, ok := resource.AttributeValues["condition"].([]any)
+		if ok && len(conditions) >= 1 {
+			condition = conditions[0].(map[string]any)
+			return fmt.Sprintf("%s %s %s %s", v("ca_pool"), v("role"), v("member"), condition["title"])
+		}
+		return fmt.Sprintf("%s %s %s", v("ca_pool"), v("role"), v("member"))
+	case "google_privateca_certificate_template_iam_member":
+		return fmt.Sprintf("%s %s %s", v("certificate_template"), v("role"), v("member"))
+	case "google_cloud_run_service_iam_binding":
+		return fmt.Sprintf("%s %s", v("service"), v("role"))
+	case "google_kms_crypto_key_iam_binding":
+		return fmt.Sprintf("%s %s", v("crypto_key_id"), v("role"))
+	case "google_kms_crypto_key_iam_member":
+		return fmt.Sprintf("%s %s %s", v("crypto_key_id"), v("role"), v("member"))
+	case "google_organization_iam_member":
+		return fmt.Sprintf("%s %s %s", v("org_id"), v("role"), v("member"))
+	case "google_project_iam_member":
+		condition := map[string]any{}
+		conditions, ok := resource.AttributeValues["condition"].([]any)
+		if ok && len(conditions) >= 1 {
+			condition = conditions[0].(map[string]any)
+			return fmt.Sprintf("%s %s %s %s", v("project"), v("role"), v("member"), condition["title"])
+		}
+		return fmt.Sprintf("%s %s %s", v("project"), v("role"), v("member"))
+	case "google_project_iam_binding":
+		return fmt.Sprintf("%s %s", v("project"), v("role"))
+	case "google_project_iam_custom_role":
+		return fmt.Sprintf("%s %s", v("project"), v("id"))
+	case "google_sql_database_instance":
+		return fmt.Sprintf("projects/%s/instances/%s", v("project"), v("name"))
+	case "google_sql_user":
+		return fmt.Sprintf("%s/%s/%s", v("project"), v("instance"), v("name"))
+	case "google_iap_tunnel_instance_iam_binding":
+		return fmt.Sprintf("%s %s", v("instance"), v("role"))
+	case "google_secret_manager_secret_iam_binding":
+		return fmt.Sprintf("%s %s", v("secret_id"), v("role"))
+	case "google_secret_manager_secret_iam_member":
+		return fmt.Sprintf("%s %s %s", v("secret_id"), v("role"), v("member"))
+	case "google_storage_bucket_iam_member":
+		return fmt.Sprintf("%s %s %s", v("bucket"), v("role"), v("member"))
+	case "google_storage_bucket_iam_binding":
+		return fmt.Sprintf("%s %s", v("bucket"), v("role"))
+	case "google_compute_subnetwork_iam_binding":
+		return fmt.Sprintf("%s %s", v("subnetwork"), v("role"))
+	case "google_pubsub_topic_iam_binding":
+		return fmt.Sprintf("%s %s", v("topic"), v("role"))
+	case "google_pubsub_topic_iam_member":
+		condition := map[string]any{}
+		conditions, ok := resource.AttributeValues["condition"].([]any)
+		if ok && len(conditions) >= 1 {
+			condition = conditions[0].(map[string]any)
+			return fmt.Sprintf("%s %s %s %s", v("topic"), v("role"), v("member"), condition["title"])
+		}
+		return fmt.Sprintf("%s %s %s", v("topic"), v("role"), v("member"))
+	case "google_pubsub_subscription_iam_member":
+		return fmt.Sprintf("projects/%s/subscriptions/%s %s %s", v("project"), v("subscription"), v("role"), v("member"))
+	case "google_pubsub_subscription_iam_binding":
+		return fmt.Sprintf("%s projects/%s/subscriptions/%s %s", v("project"), v("project"), v("subscription"), v("role"))
+	case "google_resource_manager_lien":
+		return fmt.Sprintf("%s/%s", strings.ReplaceAll(v("parent"), "projects/", ""), v("name"))
+	case "google_monitoring_uptime_check_config":
+		return fmt.Sprintf("%s %s", v("project"), v("id"))
+	case "google_monitoring_alert_policy":
+		return fmt.Sprintf("%s %s", v("project"), v("name"))
+	case "google_monitoring_notification_channel":
+		return fmt.Sprintf("%s", v("name"))
 	default:
 		return v("id")
 	}
