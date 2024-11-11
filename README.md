@@ -4,7 +4,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/kishaningithub/tf-import-gen)](https://goreportcard.com/report/github.com/kishaningithub/tf-import-gen)
 [![Latest release](https://img.shields.io/github/release/kishaningithub/tf-import-gen.svg)](https://github.com/kishaningithub/tf-import-gen/releases)
 
-Tool to generate terraform import statements to simplify state migrations from one terraform code base to another.
+Tool to generate terraform import statements to simplify state migrations from one terraform code base to another. Import management of terraform resources is provider specific, which means that this tool does not have 100% coverage. If you attempt to use this tool and notice that it generates faulty imports, consider extending the support for your resources and [contributing](#contributing) a PR.
 
 <!-- TOC -->
 * [tf-import-gen (Terraform import generator)](#tf-import-gen-terraform-import-generator)
