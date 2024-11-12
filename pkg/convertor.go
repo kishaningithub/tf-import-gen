@@ -47,8 +47,6 @@ func computeResourceID(resource parser.TerraformResource) string {
 		return fmt.Sprint(resource.AttributeValues[name])
 	}
 
-	var condition map[string]any
-
 	switch resource.Type {
 	// aws resources
 	case "aws_iam_role_policy_attachment":
@@ -104,6 +102,7 @@ func computeResourceID(resource parser.TerraformResource) string {
 	case "google_service_account_iam_binding":
 		return fmt.Sprintf("%s %s", v("service_account_id"), v("role"))
 	case "google_privateca_ca_pool_iam_member":
+		condition := map[string]any{}
 		conditions, ok := resource.AttributeValues["condition"].([]any)
 		if ok && len(conditions) >= 1 {
 			condition = conditions[0].(map[string]any)
@@ -121,6 +120,7 @@ func computeResourceID(resource parser.TerraformResource) string {
 	case "google_organization_iam_member":
 		return fmt.Sprintf("%s %s %s", v("org_id"), v("role"), v("member"))
 	case "google_project_iam_member":
+		condition := map[string]any{}
 		conditions, ok := resource.AttributeValues["condition"].([]any)
 		if ok && len(conditions) >= 1 {
 			condition = conditions[0].(map[string]any)
@@ -150,16 +150,13 @@ func computeResourceID(resource parser.TerraformResource) string {
 	case "google_pubsub_topic_iam_binding":
 		return fmt.Sprintf("%s %s", v("topic"), v("role"))
 	case "google_pubsub_topic_iam_member":
+		condition := map[string]any{}
 		conditions, ok := resource.AttributeValues["condition"].([]any)
 		if ok && len(conditions) >= 1 {
 			condition = conditions[0].(map[string]any)
 			return fmt.Sprintf("%s %s %s %s", v("topic"), v("role"), v("member"), condition["title"])
 		}
 		return fmt.Sprintf("%s %s %s", v("topic"), v("role"), v("member"))
-	case "google_pubsub_subscription_iam_member":
-		return fmt.Sprintf("projects/%s/subscriptions/%s %s %s", v("project"), v("subscription"), v("role"), v("member"))
-	case "google_pubsub_subscription_iam_binding":
-		return fmt.Sprintf("%s projects/%s/subscriptions/%s %s", v("project"), v("project"), v("subscription"), v("role"))
 	case "google_resource_manager_lien":
 		return fmt.Sprintf("%s/%s", strings.ReplaceAll(v("parent"), "projects/", ""), v("name"))
 	case "google_monitoring_uptime_check_config":
@@ -167,7 +164,7 @@ func computeResourceID(resource parser.TerraformResource) string {
 	case "google_monitoring_alert_policy":
 		return fmt.Sprintf("%s %s", v("project"), v("name"))
 	case "google_monitoring_notification_channel":
-		return fmt.Sprint(v("name"))
+		return v("name")
 	default:
 		return v("id")
 	}

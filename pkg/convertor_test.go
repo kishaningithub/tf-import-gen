@@ -915,7 +915,7 @@ func Test_ComputeTerraformImportForResource(t *testing.T) {
 			},
 			expected: TerraformImport{
 				ResourceAddress: "google_pubsub_subscription_iam_member.test",
-				ResourceID:      "projects/project/subscriptions/subscription-test roles/pubsub.subscriber serviceAccount:service@gcp-sa-pubsub.iam.gserviceaccount.com",
+				ResourceID:      "projects/project/subscriptions/subscription-test/roles/pubsub.subscriber/serviceAccount:service@gcp-sa-pubsub.iam.gserviceaccount.com",
 				SupportsImport:  false,
 			},
 		},
