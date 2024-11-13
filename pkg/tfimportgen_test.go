@@ -64,6 +64,22 @@ func Test_GenerateImports_ShouldGenerateImportsForAllResourcesWhenNoFiltersAreGi
 				},
 			},
 		},
+		{
+			name:     "google",
+			filePath: "testdata/google.json",
+			expected: tfimportgen.TerraformImports{
+				{
+					ResourceAddress: "google_project_iam_member.service_sa_bindings",
+					ResourceID:      "project projects/project/roles/service serviceAccount:service@project.iam.gserviceaccount.com Test title 1 is here.",
+					SupportsImport:  true,
+				},
+				{
+					ResourceAddress: "google_privateca_ca_pool_iam_member.client[\"user.name@email.com\"]",
+					ResourceID:      "projects/project/locations/us-north1/caPools/service roles/privateca.certificateRequester user:user.name@email.com Test title 2 is here.",
+					SupportsImport:  true,
+				},
+			},
+		},
 	}
 
 	for _, tt := range tests {

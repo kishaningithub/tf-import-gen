@@ -168,6 +168,10 @@ Flags:
 ```
 
 
+## Note
+
+Import management of terraform resources is provider specific, which means that this tool does not have 100% coverage. If you attempt to use this tool and notice that it generates faulty imports, consider extending the support for your resources and contributing a PR.
+
 ## Contributing
 
 PRs are always welcome!. Refer [CONTRIBUTING.md](./CONTRIBUTING.md) for more information

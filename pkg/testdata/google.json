@@ -1,0 +1,72 @@
+{
+  "format_version": "0.1",
+  "terraform_version": "0.12.31",
+  "values": {
+    "root_module": {
+      "resources": [
+        {
+          "address": "google_project_iam_member.service_sa_bindings",
+          "mode": "managed",
+          "type": "google_project_iam_member",
+          "name": "service_sa_bindings",
+          "provider_name": "registry.opentofu.org/hashicorp/google",
+          "schema_version": 0,
+          "values": {
+            "condition": [
+              {
+                "description": "Exclude test secret",
+                "expression": "!(resource.name.startsWith(\"projects/123456789/secrets/test\"))",
+                "title": "Test title 1 is here."
+              }
+            ],
+            "id": "project/projects/project/roles/service/serviceAccount:service@project.iam.gserviceaccount.com/exclude test secret/Exclude test secret/!(resource.name.startsWith(\"projects/123456789/secrets/test\"))",
+            "member": "serviceAccount:service@project.iam.gserviceaccount.com",
+            "project": "project",
+            "role": "projects/project/roles/service"
+          },
+          "sensitive_values": {
+            "condition": [{}]
+          },
+          "depends_on": [
+            "data.google_project.current_project",
+            "google_project_iam_custom_role.service",
+            "google_service_account.service"
+          ]
+        },
+        {
+          "address": "google_privateca_ca_pool_iam_member.client[\"user.name@email.com\"]",
+          "mode": "managed",
+          "type": "google_privateca_ca_pool_iam_member",
+          "name": "client",
+          "index": "user.name@email.com",
+          "provider_name": "registry.opentofu.org/hashicorp/google",
+          "schema_version": 0,
+          "values": {
+            "ca_pool": "projects/project/locations/us-north1/caPools/service",
+            "condition": [
+              {
+                "description": "",
+                "expression": "",
+                "title": "Test title 2 is here."
+              }
+            ],
+            "id": "projects/project/locations/us-north1/caPools/service/roles/privateca.certificateRequester/user:user.name@email.com/Test title is here.//api.getAttribute(\"privateca.googleapis.com/template\", \"\") == \"project/-/service-client\"\n&& api.getAttribute(\"privateca.googleapis.com/subject\", {})[\"common_name\"] == \"user.name@email.com\"\n",
+            "location": "us-north1",
+            "member": "user:user.name@email.com",
+            "project": "project",
+            "role": "roles/privateca.certificateRequester"
+          },
+          "sensitive_values": {
+            "condition": [{}]
+          },
+          "depends_on": [
+            "data.google_project.shared_project",
+            "data.google_projects.shared_projects",
+            "ca.google_privateca_ca_pool.pool",
+            "ca.google_privateca_certificate_template.client"
+          ]
+        }
+      ]
+    }
+  }
+}
