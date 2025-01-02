@@ -27,6 +27,7 @@ func computeTerraformImportForResource(resource parser.TerraformResource) Terraf
 		"google_compute_instance_template",
 		"google_iap_tunnel_instance_iam_binding",
 		"local_file",
+		"tailscale_tailnet_key",
 	}
 	if slices.Contains(resourcesWhichDoNotSupportImport, resource.Type) {
 		return TerraformImport{
@@ -139,10 +140,14 @@ func computeResourceID(resource parser.TerraformResource) string {
 		return fmt.Sprintf("%s %s", v("secret_id"), v("role"))
 	case "google_secret_manager_secret_iam_member":
 		return fmt.Sprintf("%s %s %s", v("secret_id"), v("role"), v("member"))
+	case "google_secret_manager_secret":
+		return v("name")
 	case "google_storage_bucket_iam_member":
 		return fmt.Sprintf("%s %s %s", v("bucket"), v("role"), v("member"))
 	case "google_storage_bucket_iam_binding":
 		return fmt.Sprintf("%s %s", v("bucket"), v("role"))
+	case "google_tags_tag_key_iam_member":
+		return fmt.Sprintf("%s %s %s", v("tag_key"), v("role"), v("member"))
 	case "google_compute_subnetwork_iam_binding":
 		return fmt.Sprintf("%s %s", v("subnetwork"), v("role"))
 	case "google_pubsub_topic_iam_binding":
