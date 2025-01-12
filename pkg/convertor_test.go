@@ -499,6 +499,24 @@ func Test_ComputeTerraformImportForResource(t *testing.T) {
 			},
 		},
 		{
+			name: "For google_tags_tag_key_iam_member.tailscale_services_tag_user",
+			terraformResource: parser.TerraformResource{
+				Address: "google_tags_tag_key_iam_member.tailscale_services_tag_user",
+				Type:    "google_tags_tag_key_iam_member",
+				AttributeValues: map[string]any{
+					"id":      "tagKeys/123456789012345/projects/project/roles/customTailscaleRole/serviceAccount:service@project.iam.gserviceaccount.com",
+					"member":  "serviceAccount:service@project.iam.gserviceaccount.com",
+					"role":    "projects/project/roles/customTailscaleRole",
+					"tag_key": "tagKeys/123456789012345",
+				},
+			},
+			expected: TerraformImport{
+				ResourceAddress: "google_tags_tag_key_iam_member.tailscale_services_tag_user",
+				ResourceID:      "tagKeys/123456789012345 projects/project/roles/customTailscaleRole serviceAccount:service@project.iam.gserviceaccount.com",
+				SupportsImport:  true,
+			},
+		},
+		{
 			name: "For google_privateca_ca_pool_iam_member.pool",
 			terraformResource: parser.TerraformResource{
 				Address: "google_privateca_ca_pool_iam_member.pool",
@@ -774,6 +792,23 @@ func Test_ComputeTerraformImportForResource(t *testing.T) {
 			expected: TerraformImport{
 				ResourceAddress: "google_secret_manager_secret_iam_binding.test",
 				ResourceID:      "projects/project/secrets/service-import roles/secretmanager.secretAccessor",
+				SupportsImport:  true,
+			},
+		},
+		{
+			name: "For google_secret_manager_secret.gcp_connector_secret",
+			terraformResource: parser.TerraformResource{
+				Address: "google_secret_manager_secret.gcp_connector_secret",
+				Type:    "google_secret_manager_secret",
+				AttributeValues: map[string]any{
+					"id":      "projects/project/secrets/a-secret-key",
+					"name":    "projects/1234567890/secrets/a-secret-key",
+					"project": "us-shared-prod",
+				},
+			},
+			expected: TerraformImport{
+				ResourceAddress: "google_secret_manager_secret.gcp_connector_secret",
+				ResourceID:      "projects/1234567890/secrets/a-secret-key",
 				SupportsImport:  true,
 			},
 		},
