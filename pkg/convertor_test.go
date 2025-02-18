@@ -430,6 +430,22 @@ func Test_ComputeTerraformImportForResource(t *testing.T) {
 			},
 		},
 		{
+			name: "For aws_cloudwatch_log_stream",
+			terraformResource: parser.TerraformResource{
+				Address: "aws_cloudwatch_log_stream.test",
+				Type:    "aws_cloudwatch_log_stream",
+				AttributeValues: map[string]any{
+					"log_group_name": "test_log_group",
+					"name":           "TestLogStream123",
+				},
+			},
+			expected: TerraformImport{
+				ResourceAddress: "aws_cloudwatch_log_stream.test",
+				ResourceID:      "test_log_group:TestLogStream123",
+				SupportsImport:  true,
+			},
+		},
+		{
 			name: "For google_monitoring_alert_policy",
 			terraformResource: parser.TerraformResource{
 				Address: "google_monitoring_alert_policy.test",
