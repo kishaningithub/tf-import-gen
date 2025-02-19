@@ -2,9 +2,10 @@ package tfimportgen
 
 import (
 	"fmt"
-	"github.com/kishaningithub/tf-import-gen/pkg/internal/parser"
 	"slices"
 	"strings"
+
+	"github.com/kishaningithub/tf-import-gen/pkg/internal/parser"
 )
 
 func computeTerraformImportForResource(resource parser.TerraformResource) TerraformImport {
@@ -94,6 +95,8 @@ func computeResourceID(resource parser.TerraformResource) string {
 		return fmt.Sprintf("%s/%s", getEcsClusterNameFromARN(v("cluster")), v("name"))
 	case "aws_cloudwatch_log_stream":
 		return fmt.Sprintf("%s:%s", v("log_group_name"), v("name"))
+	case "aws_route":
+		return fmt.Sprintf("%s_%s", v("route_table_id"), v("destination_cidr_block"))
 
 	// gcp resources
 	case "google_bigquery_dataset_iam_member":
