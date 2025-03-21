@@ -1,6 +1,6 @@
 # Binary dependencies
-golangci-lint := go run github.com/golangci/golangci-lint/cmd/golangci-lint@v1.63.4
-goreleaser := go run github.com/goreleaser/goreleaser/v2@v2.5.1
+golangci-lint := go run github.com/golangci/golangci-lint/cmd/golangci-lint@v1.64.8
+goreleaser := go run github.com/goreleaser/goreleaser/v2@v2.8.1
 
 test:
 	go test -race -v ./...
