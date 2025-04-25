@@ -453,7 +453,7 @@ func Test_ComputeTerraformImportForResource(t *testing.T) {
 				AttributeValues: map[string]any{
 					"route_table_id":              "rtb-656C65616E6F72",
 					"destination_cidr_block":      "10.42.0.0/16",
-					"destination_ipv6_cidr_block": nil,
+					"destination_ipv6_cidr_block": "",
 				},
 			},
 			expected: TerraformImport{
@@ -469,7 +469,7 @@ func Test_ComputeTerraformImportForResource(t *testing.T) {
 				Type:    "aws_route",
 				AttributeValues: map[string]any{
 					"route_table_id":              "rtb-656C65616E6F72",
-					"destination_cidr_block":      nil,
+					"destination_cidr_block":      "",
 					"destination_ipv6_cidr_block": "2620:0:2d0:200::8/1",
 				},
 			},

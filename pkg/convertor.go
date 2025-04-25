@@ -95,7 +95,7 @@ func computeResourceID(resource parser.TerraformResource) string {
 	case "aws_cloudwatch_log_stream":
 		return fmt.Sprintf("%s:%s", v("log_group_name"), v("name"))
 	case "aws_route":
-		if resource.AttributeValues["destination_cidr_block"] != nil {
+		if resource.AttributeValues["destination_cidr_block"] != "" {
 			return fmt.Sprintf("%s_%s", v("route_table_id"), v("destination_cidr_block"))
 		} else {
 			return fmt.Sprintf("%s_%s", v("route_table_id"), v("destination_ipv6_cidr_block"))
