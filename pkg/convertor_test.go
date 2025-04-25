@@ -446,6 +446,40 @@ func Test_ComputeTerraformImportForResource(t *testing.T) {
 			},
 		},
 		{
+			name: "For aws_route_with_destination_cidr_block",
+			terraformResource: parser.TerraformResource{
+				Address: "aws_route.test",
+				Type:    "aws_route",
+				AttributeValues: map[string]any{
+					"route_table_id":              "rtb-656C65616E6F72",
+					"destination_cidr_block":      "10.42.0.0/16",
+					"destination_ipv6_cidr_block": nil,
+				},
+			},
+			expected: TerraformImport{
+				ResourceAddress: "aws_route.test",
+				ResourceID:      "rtb-656C65616E6F72_10.42.0.0/16",
+				SupportsImport:  true,
+			},
+		},
+		{
+			name: "For aws_route_with_destination_ipv6_cidr_block",
+			terraformResource: parser.TerraformResource{
+				Address: "aws_route.test",
+				Type:    "aws_route",
+				AttributeValues: map[string]any{
+					"route_table_id":              "rtb-656C65616E6F72",
+					"destination_cidr_block":      nil,
+					"destination_ipv6_cidr_block": "2620:0:2d0:200::8/1",
+				},
+			},
+			expected: TerraformImport{
+				ResourceAddress: "aws_route.test",
+				ResourceID:      "rtb-656C65616E6F72_2620:0:2d0:200::8/1",
+				SupportsImport:  true,
+			},
+		},
+		{
 			name: "For google_monitoring_alert_policy",
 			terraformResource: parser.TerraformResource{
 				Address: "google_monitoring_alert_policy.test",
