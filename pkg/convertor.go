@@ -2,9 +2,10 @@ package tfimportgen
 
 import (
 	"fmt"
-	"github.com/kishaningithub/tf-import-gen/pkg/internal/parser"
 	"slices"
 	"strings"
+
+	"github.com/kishaningithub/tf-import-gen/pkg/internal/parser"
 )
 
 func computeTerraformImportForResource(resource parser.TerraformResource) TerraformImport {
@@ -58,6 +59,8 @@ func computeResourceID(resource parser.TerraformResource) string {
 		return fmt.Sprintf("%s/%s", v("function_name"), v("statement_id"))
 	case "aws_security_group_rule":
 		return computeResourceIDForAWSSecurityGroupRole(resource)
+	case "aws_network_acl_rule":
+		return computeResourceIdForAWSNetworkACLRule(resource)
 	case "aws_api_gateway_resource", "aws_api_gateway_deployment":
 		return fmt.Sprintf("%s/%s", v("rest_api_id"), v("id"))
 	case "aws_api_gateway_stage":
@@ -76,6 +79,8 @@ func computeResourceID(resource parser.TerraformResource) string {
 		return fmt.Sprintf("%s|%s", v("plan_id"), v("id"))
 	case "aws_vpc_endpoint_route_table_association":
 		return fmt.Sprintf("%s/%s", v("vpc_endpoint_id"), v("route_table_id"))
+	case "aws_vpc_endpoint_subnet_association":
+		return fmt.Sprintf("%s/%s", v("vpc_endpoint_id"), v("subnet_id"))
 	case "aws_cognito_user_pool_client":
 		return fmt.Sprintf("%s/%s", v("user_pool_id"), v("id"))
 	case "aws_ecs_cluster":
@@ -218,6 +223,14 @@ func computeResourceIDForAWSSecurityGroupRole(resource parser.TerraformResource)
 		return fmt.Sprintf("%s_%s", resourceID, strings.Join(convertToStrings(prefixListIds), "_"))
 	}
 	return resourceID
+}
+
+func computeResourceIdForAWSNetworkACLRule(resource parser.TerraformResource) string {
+	networkACLId := fmt.Sprint(resource.AttributeValues["network_acl_id"])
+	ruleNumber := fmt.Sprint(resource.AttributeValues["rule_number"])
+	protocol := fmt.Sprint(resource.AttributeValues["protocol"])
+	egress := fmt.Sprint(resource.AttributeValues["egress"])
+	return fmt.Sprintf("%s:%s:%s:%s", networkACLId, ruleNumber, protocol, egress)
 }
 
 func convertToStrings(source []any) []string {
