@@ -1,9 +1,10 @@
 package tfimportgen
 
 import (
+	"testing"
+
 	"github.com/kishaningithub/tf-import-gen/pkg/internal/parser"
 	"github.com/stretchr/testify/require"
-	"testing"
 )
 
 func Test_ComputeTerraformImportForResource(t *testing.T) {
@@ -296,6 +297,40 @@ func Test_ComputeTerraformImportForResource(t *testing.T) {
 			expected: TerraformImport{
 				ResourceAddress: "aws_vpc_endpoint_route_table_association.test",
 				ResourceID:      "vpc_endpoint_id/route_table_id",
+				SupportsImport:  true,
+			},
+		},
+		{
+			name: "For aws_vpc_endpoint_subnet_association",
+			terraformResource: parser.TerraformResource{
+				Address: "aws_vpc_endpoint_subnet_association.test",
+				Type:    "aws_vpc_endpoint_subnet_association",
+				AttributeValues: map[string]any{
+					"vpc_endpoint_id": "vpce-12345",
+					"subnet_id":       "subnet-67890",
+				},
+			},
+			expected: TerraformImport{
+				ResourceAddress: "aws_vpc_endpoint_subnet_association.test",
+				ResourceID:      "vpce-12345/subnet-67890",
+				SupportsImport:  true,
+			},
+		},
+		{
+			name: "For aws_network_acl_rule",
+			terraformResource: parser.TerraformResource{
+				Address: "aws_network_acl_rule.test",
+				Type:    "aws_network_acl_rule",
+				AttributeValues: map[string]any{
+					"network_acl_id": "acl-12345",
+					"rule_number":    100,
+					"protocol":       "6",
+					"egress":         false,
+				},
+			},
+			expected: TerraformImport{
+				ResourceAddress: "aws_network_acl_rule.test",
+				ResourceID:      "acl-12345:100:6:false",
 				SupportsImport:  true,
 			},
 		},
