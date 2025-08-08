@@ -481,6 +481,24 @@ func Test_ComputeTerraformImportForResource(t *testing.T) {
 			},
 		},
 		{
+			name: "For aws_route_with_destination_prefix_list_id",
+			terraformResource: parser.TerraformResource{
+				Address: "aws_route.test",
+				Type:    "aws_route",
+				AttributeValues: map[string]any{
+					"route_table_id":              "rtb-656C65616E6F72",
+					"destination_prefix_list_id":  "pl-12df45133",
+					"destination_cidr_block":      "",
+					"destination_ipv6_cidr_block": "",
+				},
+			},
+			expected: TerraformImport{
+				ResourceAddress: "aws_route.test",
+				ResourceID:      "rtb-656C65616E6F72_pl-12df45133",
+				SupportsImport:  true,
+			},
+		},
+		{
 			name: "For aws_route_with_destination_cidr_block",
 			terraformResource: parser.TerraformResource{
 				Address: "aws_route.test",
