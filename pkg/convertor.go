@@ -60,7 +60,7 @@ func computeResourceID(resource parser.TerraformResource) string {
 	case "aws_security_group_rule":
 		return computeResourceIDForAWSSecurityGroupRole(resource)
 	case "aws_network_acl_rule":
-		return computeResourceIdForAWSNetworkACLRule(resource)
+		return fmt.Sprintf("%s:%s:%s:%s", v("network_acl_id"), v("rule_number"), v("protocol"), v("egress"))
 	case "aws_api_gateway_resource", "aws_api_gateway_deployment":
 		return fmt.Sprintf("%s/%s", v("rest_api_id"), v("id"))
 	case "aws_api_gateway_stage":
@@ -100,13 +100,13 @@ func computeResourceID(resource parser.TerraformResource) string {
 	case "aws_cloudwatch_log_stream":
 		return fmt.Sprintf("%s:%s", v("log_group_name"), v("name"))
 	case "aws_route":
-		if resource.AttributeValues["destination_prefix_list_id"] != "" {
+		if v("destination_prefix_list_id") != "" {
 			return fmt.Sprintf("%s_%s", v("route_table_id"), v("destination_prefix_list_id"))
-		} else if resource.AttributeValues["destination_cidr_block"] != "" {
-			return fmt.Sprintf("%s_%s", v("route_table_id"), v("destination_cidr_block"))
-		} else {
-			return fmt.Sprintf("%s_%s", v("route_table_id"), v("destination_ipv6_cidr_block"))
 		}
+		if v("destination_cidr_block") != "" {
+			return fmt.Sprintf("%s_%s", v("route_table_id"), v("destination_cidr_block"))
+		}
+		return fmt.Sprintf("%s_%s", v("route_table_id"), v("destination_ipv6_cidr_block"))
 	// gcp resources
 	case "google_bigquery_dataset_iam_member":
 		return fmt.Sprintf("projects/%s/datasets/%s %s %s", v("project"), v("dataset_id"), v("role"), v("member"))
@@ -225,14 +225,6 @@ func computeResourceIDForAWSSecurityGroupRole(resource parser.TerraformResource)
 		return fmt.Sprintf("%s_%s", resourceID, strings.Join(convertToStrings(prefixListIds), "_"))
 	}
 	return resourceID
-}
-
-func computeResourceIdForAWSNetworkACLRule(resource parser.TerraformResource) string {
-	networkACLId := fmt.Sprint(resource.AttributeValues["network_acl_id"])
-	ruleNumber := fmt.Sprint(resource.AttributeValues["rule_number"])
-	protocol := fmt.Sprint(resource.AttributeValues["protocol"])
-	egress := fmt.Sprint(resource.AttributeValues["egress"])
-	return fmt.Sprintf("%s:%s:%s:%s", networkACLId, ruleNumber, protocol, egress)
 }
 
 func convertToStrings(source []any) []string {
