@@ -1,7 +1,3 @@
-# Binary dependencies
-golangci-lint := go run github.com/golangci/golangci-lint/v2/cmd/golangci-lint@v2.4.0
-goreleaser := go run github.com/goreleaser/goreleaser/v2@v2.12.0
-
 test:
 	go test -race -v ./...
 
@@ -17,15 +13,19 @@ tidy-deps:
 	go mod tidy
 
 update-deps:
-	go get -u -t ./...
-	go mod tidy
+	@echo "✓ Upgrading all compile and test dependencies..."
+	@go get -u -t ./...
+	@echo "✓ Upgrading all dev dependencies..."
+	@go get tool
+	@echo "✓ Tidying up the go.mod file..."
+	@go mod tidy
 
 compile:
 	go build -v ./...
 
 lint:
-	$(golangci-lint) run
-	$(goreleaser) check
+	go tool golangci-lint run
+	go tool goreleaser check
 
 release:
-	$(goreleaser) release --clean
+	go tool goreleaser release --clean
