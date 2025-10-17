@@ -1,16 +1,20 @@
 test:
-	go test -race -v ./...
+	@echo "✓ Running all unit tests..."
+	@go test -race ./...
 
 build: download-deps tidy-deps compile test lint
 
 fmt:
-	gofmt -l -s -w .
+	@echo "✓ Formatting all source code..."
+	@gofmt -l -s -w .
 
 download-deps:
-	go mod download
+	@echo "✓ Downloading all dependencies..."
+	@go mod download
 
 tidy-deps:
-	go mod tidy
+	@echo "✓ Tidying up all dependencies..."
+	@go mod tidy
 
 update-deps:
 	@echo "✓ Upgrading all compile and test dependencies..."
@@ -21,11 +25,15 @@ update-deps:
 	@go mod tidy
 
 compile:
-	go build -v ./...
+	@echo "✓ Compiling the source code..."
+	@go build ./...
 
 lint:
-	go tool golangci-lint run
-	go tool goreleaser check
+	@echo "✓ Running golangci-lint..."
+	@go tool golangci-lint run
+	@echo "✓ Running goreleaser..."
+	@go tool goreleaser check
 
 release:
-	go tool goreleaser release --clean
+	@echo "✓ Creating and publishing release..."
+	@go tool goreleaser release --clean
