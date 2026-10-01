@@ -30,6 +30,13 @@ homebrew_casks:
     homepage: https://github.com/kishaningithub/tf-import-gen
     description: Tool to generate terraform import statements to simplify state migrations from one terraform code base to another
     license: MIT
+    # The binary is not signed and notarized, so remove the quarantine attribute to prevent Gatekeeper from blocking it
+    hooks:
+      post:
+        install: |
+          if OS.mac?
+            system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/tf-import-gen"]
+          end
 
 scoops:
   - repository:
