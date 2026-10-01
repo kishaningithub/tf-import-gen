@@ -32,7 +32,7 @@ type TerraformImports []TerraformImport
 func (terraformImports TerraformImports) String() string {
 	var terraformImportsStr strings.Builder
 	for _, terraformImport := range terraformImports {
-		terraformImportsStr.WriteString(fmt.Sprintln(terraformImport))
+		_, _ = fmt.Fprintln(&terraformImportsStr, terraformImport)
 	}
 	return terraformImportsStr.String()
 }

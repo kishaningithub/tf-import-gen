@@ -10,6 +10,7 @@ Tool to generate terraform import statements to simplify state migrations from o
 * [tf-import-gen (Terraform import generator)](#tf-import-gen-terraform-import-generator)
   * [Installation](#installation)
     * [Using Homebrew (Mac and linux)](#using-homebrew-mac-and-linux)
+    * [Using Scoop (Windows)](#using-scoop-windows)
     * [Using docker](#using-docker)
     * [Using pkgx](#using-pkgx)
     * [Others](#others)
@@ -28,6 +29,13 @@ Tool to generate terraform import statements to simplify state migrations from o
 
 ```bash
 brew install kishaningithub/tap/tf-import-gen
+```
+
+### Using Scoop (Windows)
+
+```powershell
+scoop bucket add kishaningithub https://github.com/kishaningithub/scoop-bucket
+scoop install kishaningithub/tf-import-gen
 ```
 
 ### Using docker
