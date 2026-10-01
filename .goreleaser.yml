@@ -32,6 +32,14 @@ brews:
     description: Tool to generate terraform import statements to simplify state migrations from one terraform code base to another
     license: MIT
 
+scoops:
+  - repository:
+      owner: kishaningithub
+      name: scoop-bucket
+    homepage: https://github.com/kishaningithub/tf-import-gen
+    description: Tool to generate terraform import statements to simplify state migrations from one terraform code base to another
+    license: MIT
+
 nfpms:
   - id: tf-import-gen
     package_name: tf-import-gen
