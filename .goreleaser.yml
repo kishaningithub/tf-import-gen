@@ -23,11 +23,10 @@ builds:
     env:
       - CGO_ENABLED=0
 
-brews:
+homebrew_casks:
   - repository:
       owner: kishaningithub
       name: homebrew-tap
-    directory: Formula
     homepage: https://github.com/kishaningithub/tf-import-gen
     description: Tool to generate terraform import statements to simplify state migrations from one terraform code base to another
     license: MIT
