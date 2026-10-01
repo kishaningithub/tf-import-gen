@@ -28,7 +28,23 @@ Tool to generate terraform import statements to simplify state migrations from o
 ### Using Homebrew (Mac and linux)
 
 ```bash
-brew install kishaningithub/tap/tf-import-gen
+brew trust kishaningithub/tap
+brew install --cask kishaningithub/tap/tf-import-gen
+```
+
+#### Migrating from the formula version
+
+Older versions of tf-import-gen were distributed as a Homebrew formula and are now distributed as a cask. If you installed the formula version, run the following to migrate
+
+```bash
+brew trust kishaningithub/tap
+brew update
+```
+
+Homebrew will automatically install the cask version. Optionally, remove the leftover formula version
+
+```bash
+brew uninstall --formula tf-import-gen
 ```
 
 ### Using Scoop (Windows)
