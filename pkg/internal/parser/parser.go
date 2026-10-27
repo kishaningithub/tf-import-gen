@@ -2,6 +2,8 @@ package parser
 
 import (
 	"strings"
+
+	"github.com/samber/lo"
 )
 
 type TerraformResource struct {
@@ -14,16 +16,11 @@ type TerraformResource struct {
 type TerraformResources []TerraformResource
 
 func (resources TerraformResources) FilterByAddresses(addresses []string) TerraformResources {
-	var filteredResources TerraformResources
-	for _, resource := range resources {
-		for _, address := range addresses {
-			if strings.HasPrefix(resource.Address, address) {
-				filteredResources = append(filteredResources, resource)
-				break
-			}
-		}
-	}
-	return filteredResources
+	return lo.Filter(resources, func(resource TerraformResource, _ int) bool {
+		return lo.ContainsBy(addresses, func(address string) bool {
+			return strings.HasPrefix(resource.Address, address)
+		})
+	})
 }
 
 type TerraformStateParser interface {
