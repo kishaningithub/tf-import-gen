@@ -4,6 +4,7 @@ go 1.27.3
 
 require (
 	github.com/hashicorp/terraform-json v0.29.0
+	github.com/samber/lo v1.53.0
 	github.com/spf13/cobra v1.10.2
 	github.com/stretchr/testify v1.12.1
 )

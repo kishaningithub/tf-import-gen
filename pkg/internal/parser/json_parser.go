@@ -3,9 +3,11 @@ package parser
 import (
 	"encoding/json"
 	"fmt"
-	tfjson "github.com/hashicorp/terraform-json"
 	"io"
 	"strings"
+
+	tfjson "github.com/hashicorp/terraform-json"
+	"github.com/samber/lo"
 )
 
 var (
@@ -36,27 +38,24 @@ func (parser TerraformStateJsonParser) Parse() (TerraformResources, error) {
 }
 
 func (parser TerraformStateJsonParser) parseResourcesWithinModule(module *tfjson.StateModule) []TerraformResource {
-	var allResources []TerraformResource
-	allResources = append(allResources, parser.parseResources(module.Resources, module.Address)...)
-	for _, childModule := range module.ChildModules {
-		allResources = append(allResources, parser.parseResourcesWithinModule(childModule)...)
-	}
-	return allResources
+	resourcesWithinModule := parser.parseResources(module.Resources, module.Address)
+	resourcesWithinChildModules := lo.FlatMap(module.ChildModules, func(childModule *tfjson.StateModule, _ int) []TerraformResource {
+		return parser.parseResourcesWithinModule(childModule)
+	})
+	return append(resourcesWithinModule, resourcesWithinChildModules...)
 }
 
 func (parser TerraformStateJsonParser) parseResources(resources []*tfjson.StateResource, moduleAddress string) []TerraformResource {
-	var resourceImportModel []TerraformResource
-	for _, resource := range resources {
-		if resource.Mode != tfjson.ManagedResourceMode {
-			continue
-		}
-		resourceImportModel = append(resourceImportModel, TerraformResource{
+	managedResources := lo.Filter(resources, func(resource *tfjson.StateResource, _ int) bool {
+		return resource.Mode == tfjson.ManagedResourceMode
+	})
+	return lo.Map(managedResources, func(resource *tfjson.StateResource, _ int) TerraformResource {
+		return TerraformResource{
 			Address:         parser.computeResourceAddressIncludingModule(moduleAddress, resource),
 			Type:            resource.Type,
 			AttributeValues: resource.AttributeValues,
-		})
-	}
-	return resourceImportModel
+		}
+	})
 }
 
 func (parser TerraformStateJsonParser) computeResourceAddressIncludingModule(moduleAddress string, resource *tfjson.StateResource) string {

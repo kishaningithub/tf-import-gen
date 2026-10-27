@@ -1,8 +1,10 @@
 package tfimportgen
 
 import (
-	"github.com/kishaningithub/tf-import-gen/pkg/internal/parser"
 	"io"
+
+	"github.com/kishaningithub/tf-import-gen/pkg/internal/parser"
+	"github.com/samber/lo"
 )
 
 func GenerateImports(stateJsonReader io.Reader, addresses []string) (TerraformImports, error) {
@@ -15,11 +17,9 @@ func GenerateImports(stateJsonReader io.Reader, addresses []string) (TerraformIm
 		resources = resources.FilterByAddresses(addresses)
 	}
 
-	var imports TerraformImports
-	for _, resource := range resources {
-		terraformImport := computeTerraformImportForResource(resource)
-		imports = append(imports, terraformImport)
-	}
+	imports := lo.Map(resources, func(resource parser.TerraformResource, _ int) TerraformImport {
+		return computeTerraformImportForResource(resource)
+	})
 
 	return imports, nil
 }

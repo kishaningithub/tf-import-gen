@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/kishaningithub/tf-import-gen/pkg/internal/parser"
+	"github.com/samber/lo"
 )
 
 func computeTerraformImportForResource(resource parser.TerraformResource) TerraformImport {
@@ -228,9 +229,7 @@ func computeResourceIDForAWSSecurityGroupRole(resource parser.TerraformResource)
 }
 
 func convertToStrings(source []any) []string {
-	var result []string
-	for _, element := range source {
-		result = append(result, fmt.Sprint(element))
-	}
-	return result
+	return lo.Map(source, func(element any, _ int) string {
+		return fmt.Sprint(element)
+	})
 }
